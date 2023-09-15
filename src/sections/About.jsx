@@ -21,7 +21,7 @@ export default function About({ innerRef }) {
   const info = {
     Birthday: "1 Dec 1996",
     Age: ageCalculator(),
-    Website: "www.example.com",
+    Website: "www.polimbing.dev",
     Phone: "+63 960 211 2123",
     Degree: "Bachelor",
     Email: "uraman2000@gmail.com",
@@ -44,7 +44,7 @@ export default function About({ innerRef }) {
           abilities.
         </p>
         <div className=" flex flex-col lg:flex-row mt-8  gap-10 items-center ">
-          <img className="w-max lg:w-2/5 h-max " src={meImage} alt="" />
+          <img className="w-max lg:w-2/5 h-auto " src={meImage} alt="" />
           <div>
             <div className="text-gray-500 font-bold text-3xl mb-2">
               Senior React Developer.
