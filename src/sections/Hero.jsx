@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import LinkdnIcon from "../assets/LinkdnIcon"
-import GithubIcon from "../assets/githubIcon"
+import GithubIcon from "../assets/GithubIcon"
 
 import Typewriter from "typewriter-effect"
 export default function Hero({ innerRef }) {
