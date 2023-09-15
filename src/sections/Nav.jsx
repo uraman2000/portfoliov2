@@ -5,8 +5,8 @@ import portfolioIcon from "../assets/portfolio.svg"
 import servicesIcon from "../assets/services.svg"
 import contactIcon from "../assets/contact.svg"
 import { useEffect, useMemo, useRef, useState } from "react"
-import HamburgerIcon from "../assets/hamburgerIcon"
 import CloseIcon from "../assets/CloseIcon"
+import HamburgerIcon from "../assets/HamburgerIcon"
 
 export default function Nav({ observerRefs }) {
   const navItems = [
@@ -120,7 +120,7 @@ export default function Nav({ observerRefs }) {
                     item.href.replace(/#/g, "") === isIntersecting
                       ? "bg-blue-500"
                       : "bg-gray-100"
-                  } group   w-full h-14 rounded-full flex flex-row gap-3 items-center`}
+                  } group w-full h-14 rounded-full flex flex-row gap-3 items-center`}
                 >
                   <img
                     src={item.icon}
