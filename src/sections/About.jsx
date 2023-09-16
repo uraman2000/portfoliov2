@@ -31,7 +31,7 @@ export default function About({ innerRef }) {
     <section
       ref={innerRef}
       id="about"
-      className="flex xl:h-screen mt-10 xl:mt-0 justify-center items-center  "
+      className="flex xl:h-full mt-10 xl:mt-0 justify-center items-center  "
     >
       <div className="w-10/12 md:w-11/12 xl:w-3/5">
         <Title text="ABOUT" />

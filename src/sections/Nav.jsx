@@ -101,7 +101,7 @@ export default function Nav({ observerRefs }) {
       </nav>
       <div className=" visible md:invisible ">
         <button
-          className="fixed top-10 right-10 z-10"
+          className="fixed top-10 right-10 z-50"
           onClick={hamburgerHandler}
         >
           {!isOpen ? <HamburgerIcon /> : <CloseIcon />}
@@ -109,13 +109,14 @@ export default function Nav({ observerRefs }) {
         <nav
           className={`${
             isOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform transform fixed z-50 border-r w-3/6 bg-white px-5 h-screen flex items-center justify-center`}
+          } transition-transform transform fixed z-40 border-r w-full bg-white px-5 h-screen flex items-center justify-center`}
         >
           <ul className="flex flex-col gap-3  w-full">
             {navItems.map((item, index) => (
               <li key={index}>
                 <a
                   href={item.href}
+                  onClick={hamburgerHandler}
                   className={`${
                     item.href.replace(/#/g, "") === isIntersecting
                       ? "bg-blue-500"
