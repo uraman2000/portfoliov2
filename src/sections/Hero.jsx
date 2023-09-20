@@ -49,10 +49,7 @@ export default function Hero({ innerRef }) {
             <LinkdnIcon />
           </a>
           <a
-            download
             href={"/pol-imbing-v2.pdf"}
-            target="_blank"
-            rel="noopener noreferrer"
             className="invisible w-0 md:visible md:w-max"
           >
             <button className="absolute md:relative md: disabled:bg-gray-600 flex items-center py-2 px-4 bg-blue-600 enabled:hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 ease-in-out transform enabled:hover:scale-105">
