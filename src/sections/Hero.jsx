@@ -4,7 +4,7 @@ import GithubIcon from "../assets/GithubIcon"
 
 import Typewriter from "typewriter-effect"
 export default function Hero({ innerRef }) {
-  console.log(import.meta.env)
+  const baseUrl = import.meta.env.BASE_URL
   return (
     <section
       ref={innerRef}
@@ -50,8 +50,8 @@ export default function Hero({ innerRef }) {
             <LinkdnIcon />
           </a>
           <a
-            download={"/pol-imbing-v2.pdf"}
-            href={"/pol-imbing-v2.pdf"}
+            download={`${baseUrl}pol-imbing-v2.pdf`}
+            href={`${baseUrl}pol-imbing-v2.pdf`}
             className="invisible w-0 md:visible md:w-max absolute md:relative md: disabled:bg-gray-600 flex items-center py-2 px-4 bg-blue-600 enabled:hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 ease-in-out transform enabled:hover:scale-105"
           >
             Download Resume
