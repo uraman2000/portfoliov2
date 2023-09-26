@@ -4,7 +4,5 @@ import react from "@vitejs/plugin-react-swc"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    base: "https://www.polimbing.dev/",
-  },
+  base: "https://www.polimbing.dev/",
 })
