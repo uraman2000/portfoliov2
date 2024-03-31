@@ -22,7 +22,7 @@ export default function Resume({ innerRef }) {
         <div className="text-3xl font-bold text-gray-600 mt-5 mb-6">
           Professional Experience
         </div>
-        <div className="grid grid-cols-1  lg:grid-cols-2 gap-x-8">
+        <div className="flex flex-col flex-wrap gap-x-8">
           <PersonalExperience />
         </div>
       </div>

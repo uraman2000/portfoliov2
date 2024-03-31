@@ -2,9 +2,14 @@ import Title from "../components/Title"
 import clearlyImage from "../assets/portfolio/clearly.png"
 import borrowersImage from "../assets/portfolio/borrowers.png"
 import creditOfficerImage from "../assets/portfolio/creditOfficer.png"
+import dataLabImage from "../assets/portfolio/data-lab.png"
 
 const list = [
   {
+    name: "Data Lab",
+    image: dataLabImage,
+    link: " https://cs.c-datalab.com/",
+  }, {
     name: "Clearly",
     image: clearlyImage,
     link: " https://www.clearly.ca/en-ca",
