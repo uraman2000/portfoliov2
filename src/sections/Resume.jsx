@@ -6,7 +6,7 @@ export default function Resume({ innerRef }) {
     <section
       ref={innerRef}
       id="resume"
-      className="flex mt-10 xl:mt-0 justify-center items-center pb-16"
+      className="flex h-max mt-10 justify-center items-center "
     >
       <div className="w-10/12 md:w-11/12 xl:w-3/5">
         <Title text="RESUME" />

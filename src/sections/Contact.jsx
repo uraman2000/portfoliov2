@@ -36,7 +36,7 @@ export default function Contact({ innerRef }) {
     <div
       ref={innerRef}
       id="contact"
-      className="xl:h-screen mt-10 xl:mt-0 flex flex-col justify-between "
+      className="h-max flex flex-col justify-between "
     >
       <section className="flex justify-center items-center pt-16">
         <div className="w-10/12 md:w-11/12 xl:w-4/5">

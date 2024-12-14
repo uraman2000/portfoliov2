@@ -30,7 +30,7 @@ export default function Portfolio({ innerRef }) {
     <section
       ref={innerRef}
       id="portfolio"
-      className="flex xl:h-screen mt-10 xl:mt-0 justify-center pt-16"
+      className="flex h-max  justify-center mt-10"
     >
       <div className="w-10/12 md:w-11/12 xl:w-3/5">
         <Title text="PORTFOLIO" />
