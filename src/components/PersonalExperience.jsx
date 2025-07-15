@@ -2,9 +2,24 @@ import React from "react"
 
 const jobHistory = [
   {
+    company: "Eteam Workforce Private Corporation",
+    position: "Senior React Developer",
+    duration: "Nov 2024 – Present",
+    responsibilities: [
+      "Collaborate with cross-functional teams including designers, backend developers, and QA to deliver robust healthcare-focused solutions.",
+      "Work extensively with FHIR R5 standards to build interoperable healthcare applications that align with modern data exchange protocols.",
+      "Maintain 80%+ coverage on unit and integration tests to ensure high code reliability, stability, and confidence during feature releases.",
+      "Architect reusable, testable components and implement efficient UI patterns using technologies like Redux Toolkit, Tailwind CSS, and TypeScript.",
+      "Conduct thorough code reviews and provide mentorship to junior developers to uphold code quality and consistency across the team.",
+      "Optimize performance using techniques such as lazy loading, memoization, and dynamic imports.",
+      "Participate actively in Agile processes including sprint planning, backlog grooming, and retrospectives.",
+      "Ensure application accessibility and responsiveness across devices and browsers.",
+    ],
+  },
+  {
     company: "Yempo - Your Employees Offshore",
     position: "Senior React Developer",
-    duration: "Nov 2023 – Present",
+    duration: "Nov 2023 – Oct 2024",
     responsibilities: [
       "Participate in technical discussions and provide leadership in architectural decisions related to the front-end.",
       "Mentor and guide junior developers by providing code reviews, knowledge sharing, and on-the-job training.",
