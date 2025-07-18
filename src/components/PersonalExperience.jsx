@@ -1,4 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react"
+import { animated } from '@react-spring/web'
+import { useStaggeredAnimation } from '../hooks/useScrollAnimation'
 
 const jobHistory = [
   {
@@ -105,74 +108,58 @@ export default function PersonalExperience() {
   const middleIndex = Math.ceil(jobHistory.length / 3)
   const column1Data = jobHistory.slice(0, middleIndex )
   const column2Data = jobHistory.slice(middleIndex)
-console.log(middleIndex)
-  const layout = item => {
+  
+  // Staggered animations for job history items
+  const [column1Ref, column1Animations] = useStaggeredAnimation(column1Data, 200)
+  const [column2Ref, column2Animations] = useStaggeredAnimation(column2Data, 300)
+
+  const layout = (item, animation) => {
     return (
-      <div className="border-l-2 border-solid border-blue-500 pb-5 pl-5 p-4 pt-0">
+      <animated.div 
+        style={animation}
+        className="border-l-2 border-solid border-blue-500 pb-5 pl-5 p-4 pt-0 hover:bg-gray-50 transition-colors duration-300 rounded-r-lg"
+      >
         <div className=" text-blue-500 font-bold text-xl flex">
-          <span className="-translate-x-7 w-4 h-4 border-2 border-blue-500 rounded-full flex items-center justify-center bg-white"></span>
+          <span className="-translate-x-7 w-4 h-4 border-2 border-blue-500 rounded-full flex items-center justify-center bg-white transition-all duration-300 hover:scale-110"></span>
           <span className="-translate-y-1/4 -translate-x-4">
             {item.company}
           </span>
         </div>
-        <div className="-translate-y-3 italic">{item.position}</div>
-        <div className="bg-gray-50 w-max py-1 px-4 font-semibold mb-4">
+        <div className="-translate-y-3 italic text-gray-600">{item.position}</div>
+        <div className="bg-blue-50 w-max py-1 px-4 font-semibold mb-4 rounded-full text-blue-700">
           {item.duration}
         </div>
-        <ul className="ml-5 list-disc list-outside">
-          {item.responsibilities.map((item, key) => (
-            <li key={key} className="mb-2">
-              {item}
+        <ul className="ml-5 list-disc list-outside space-y-2">
+          {item.responsibilities.map((responsibility, key) => (
+            <li key={key} className="mb-2 text-gray-700 leading-relaxed">
+              {responsibility}
             </li>
           ))}
         </ul>
-      </div>
+      </animated.div>
     )
   }
 
   return (
-    <div className="flex lg:flex-row flex-col">
+    <div className="flex lg:flex-row flex-col gap-8">
       <div className="lg:w-1/2 w-full">
-        <div className="flex flex-col flex-wrap mt-2">
+        <div ref={column1Ref} className="flex flex-col flex-wrap mt-2 space-y-6">
           {column1Data.map((item, index) => (
-            <>
-              {layout(item)}
-            </>
+            <React.Fragment key={index}>
+              {layout(item, column1Animations[index])}
+            </React.Fragment>
           ))}
         </div>
       </div>
       <div className="lg:w-1/2 w-full">
-        <div className="flex flex-col flex-wrap">
+        <div ref={column2Ref} className="flex flex-col flex-wrap space-y-6">
           {column2Data.map((item, index) => (
-            <>
-              {layout(item)}
-            </>
+            <React.Fragment key={index}>
+              {layout(item, column2Animations[index])}
+            </React.Fragment>
           ))}
         </div>
       </div>
     </div>
   )
-
-  // return jobHistory.map((item, index) => (
-  //   <div
-  //     key={index}
-  //     className="border-l-2 border-solid border-blue-500 pb-5 pl-5 w-1/2 p-4"
-  //   >
-  //     <div className=" text-blue-500 font-bold text-xl flex">
-  //       <span className="-translate-x-7 w-4 h-4 border-2 border-blue-500 rounded-full flex items-center justify-center bg-white"></span>
-  //       <span className="-translate-y-1/4 -translate-x-4">{item.company}</span>
-  //     </div>
-  //     <div className="-translate-y-3 italic">{item.position}</div>
-  //     <div className="bg-gray-50 w-max py-1 px-4 font-semibold mb-4">
-  //       {item.duration}
-  //     </div>
-  //     <ul className="ml-5 list-disc list-outside">
-  //       {item.responsibilities.map((item, key) => (
-  //         <li key={key} className="mb-2">
-  //           {item}
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </div>
-  // ))
 }

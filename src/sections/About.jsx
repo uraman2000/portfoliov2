@@ -1,6 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 import Title from "../components/Title"
 import meImage from "../assets/me.jpg"
 import ArrowRight from "../assets/ArrowRight"
+import { animated } from '@react-spring/web'
+import { useScrollAnimation, useSlideAnimation, useStaggeredAnimation } from '../hooks/useScrollAnimation'
+import PropTypes from 'prop-types'
 
 const ageCalculator = () => {
   const birthdate = new Date("1995-12-02")
@@ -17,6 +21,7 @@ const ageCalculator = () => {
 
   return age
 }
+
 export default function About({ innerRef }) {
   const info = {
     Birthday: "1 Dec 1996",
@@ -27,13 +32,30 @@ export default function About({ innerRef }) {
     Email: "uraman2000@gmail.com",
   }
 
+  // Animation for the main container
+  const [containerRef, containerAnimation] = useScrollAnimation(0, 0.2)
+  
+  // Animation for the image (slide in from left)
+  const [imageRef, imageAnimation] = useSlideAnimation('left', 100)
+  
+  // Animation for the content (slide in from right)
+  const [contentRef, contentAnimation] = useSlideAnimation('right', 200)
+  
+  // Staggered animations for info items
+  const infoItems = Object.entries(info)
+  const [infoRef, infoAnimations] = useStaggeredAnimation(infoItems, 100)
+
   return (
     <section
       ref={innerRef}
       id="about"
       className="flex h-max mt-10  justify-center items-center"
     >
-      <div className="w-10/12 md:w-11/12 xl:w-3/5 ">
+      <animated.div 
+        ref={containerRef}
+        style={containerAnimation}
+        className="w-10/12 md:w-11/12 xl:w-3/5 "
+      >
         <Title text="ABOUT" />
         <p className=" text-center">
           Greetings! I'm delighted to extend a warm welcome to my web portfolio.
@@ -44,8 +66,17 @@ export default function About({ innerRef }) {
           abilities.
         </p>
         <div className=" flex flex-col lg:flex-row mt-8  gap-10 items-center ">
-          <img className="w-max lg:w-2/5 h-auto " src={meImage} alt="" />
-          <div>
+          <animated.img 
+            ref={imageRef}
+            style={imageAnimation}
+            className="w-max lg:w-2/5 h-auto rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300" 
+            src={meImage} 
+            alt="Pol Maynard O. Imbing" 
+          />
+          <animated.div
+            ref={contentRef}
+            style={contentAnimation}
+          >
             <div className="text-gray-500 font-bold text-3xl mb-2">
               Senior React Developer.
             </div>
@@ -55,12 +86,16 @@ export default function About({ innerRef }) {
               experiences. My journey in the world of web development has been
               marked by a continuous quest for excellence and innovation.
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
-              {Object.entries(info).map(([key, value]) => (
-                <div key={key} className="flex items-center gap-1">
+            <div ref={infoRef} className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
+              {infoItems.map(([key, value], index) => (
+                <animated.div 
+                  key={key} 
+                  style={infoAnimations[index]}
+                  className="flex items-center gap-1 transform transition-transform hover:scale-105"
+                >
                   <ArrowRight />
                   <strong>{key}: </strong> {value}
-                </div>
+                </animated.div>
               ))}
             </div>
             <div className="mt-5">
@@ -73,9 +108,13 @@ export default function About({ innerRef }) {
               reality and contribute to the ever-evolving world of web
               development.
             </div>
-          </div>
+          </animated.div>
         </div>
-      </div>
+      </animated.div>
     </section>
   )
+}
+
+About.propTypes = {
+  innerRef: PropTypes.func.isRequired,
 }
