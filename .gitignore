@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .history
+
+# Python bytecode (from .claude/skills scripts)
+__pycache__/
