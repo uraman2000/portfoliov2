@@ -1,141 +1,87 @@
-/* eslint-disable react/no-unescaped-entities */
-import LinkdnIcon from "../assets/LinkdnIcon"
-import GithubIcon from "../assets/GithubIcon"
-import { animated, useSpring } from '@react-spring/web'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import PropTypes from 'prop-types'
+import Container from "../components/Container"
+import SocialLinks from "../components/SocialLinks"
+import { ArrowRight, DownloadSimple } from "../components/icons"
+import { impact, profile } from "../data/profile"
 
-import Typewriter from "typewriter-effect"
+const rise = delay => ({ "--rise-delay": `${delay}ms` })
 
-export default function Hero({ innerRef }) {
-  // Animation for the main content container
-  const [contentRef, contentAnimation] = useScrollAnimation(0, 0.1)
-  
-  const nameAnimation = useSpring({
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(50px)' },
-    config: { tension: 120, friction: 25 },
-    delay: 500,
-  })
-
-  const typewriterAnimation = useSpring({
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(30px)' },
-    config: { tension: 120, friction: 25 },
-    delay: 700,
-  })
-
-  const socialAnimation = useSpring({
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(30px)' },
-    config: { tension: 120, friction: 25 },
-    delay: 900,
-  })
-
-  const resumeAnimation = useSpring({
-    opacity: 1,
-    transform: 'translateY(0px)',
-    from: { opacity: 0, transform: 'translateY(30px)' },
-    config: { tension: 120, friction: 25 },
-    delay: 1100,
-  })
-
-  // Background animation
-  const backgroundAnimation = useSpring({
-    opacity: 0.9,
-    from: { opacity: 0 },
-    config: { tension: 80, friction: 30 },
-    delay: 100,
-  })
+export default function Hero() {
+  const [headlineStart, headlineEnd] = profile.headline
 
   return (
-    <section
-      ref={innerRef}
-      id="hero"
-      className={`bg-hero bg-cover bg-center bg-fixed flex h-screen justify-center items-center relative overflow-hidden`}
-    >
-      <animated.div 
-        style={backgroundAnimation}
-        className="bg-white absolute h-screen w-screen"
-      />
+    <section id="top" aria-labelledby="hero-heading" className="relative overflow-hidden pt-28 sm:pt-32">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 top-16 hidden md:block">
+        <Container className="h-full">
+          <div className="hero-guides h-full" />
+        </Container>
+      </div>
 
-      <animated.div 
-        ref={contentRef}
-        style={contentAnimation}
-        className="w-full md:w-3/5 z-20 flex gap-3 flex-col items-center md:items-start"
-      >
-        <animated.h1 
-          style={nameAnimation}
-          className="text-3xl md:text-7xl font-bold text-gray-600"
+      <Container className="relative">
+        <p
+          className="rise inline-flex items-center gap-2.5 rounded-full border border-line bg-surface py-1.5 pl-3 pr-3.5 text-sm text-muted"
+          style={rise(0)}
         >
-          Pol Imbing
-        </animated.h1>
+          <span className="status-dot" aria-hidden="true" />
+          {profile.availability}
+        </p>
 
-        <animated.div 
-          style={typewriterAnimation}
-          className="text-gray-600 text-xl md:text-3xl flex items-center sm:flex-row flex-col gap-2"
-        >
-          <p>I'm a</p>
-          <div className="text-blue-600">
-            <Typewriter
-              options={{
-                strings: [
-                  "React Developer",
-                  "Nest Js Developer",
-                  "Full Stack Developer",
-                ],
-                autoStart: true,
-                loop: true,
-              }}
-            />
+        <h1 id="hero-heading" className="mt-8">
+          <span className="rise eyebrow block" style={rise(60)}>
+            {profile.name} — {profile.role}
+          </span>
+          <span className="rise display mt-5 block text-balance" style={rise(120)}>
+            <span className="sm:block">{headlineStart}</span>{" "}
+            <span className="text-muted sm:block">{headlineEnd}</span>
+          </span>
+        </h1>
+
+        <div className="mt-10 grid gap-12 lg:mt-12 lg:grid-cols-12 lg:gap-x-8">
+          <div className="rise lg:col-span-7" style={rise(180)}>
+            <p className="max-w-2xl text-lg leading-relaxed text-muted text-pretty sm:text-xl sm:leading-relaxed">
+              {profile.lead}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#work" className="btn btn-primary">
+                See selected work
+                <ArrowRight size={18} className="nudge-x" aria-hidden="true" />
+              </a>
+              <a href={profile.resume.href} download={profile.resume.fileName} className="btn btn-secondary">
+                <DownloadSimple size={18} className="nudge-y" aria-hidden="true" />
+                Download resume
+              </a>
+            </div>
           </div>
-        </animated.div>
 
-        <animated.div 
-          style={socialAnimation}
-          className="flex items-center gap-5"
-        >
-          <a
-            href="https://github.com/uraman2000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transform transition-transform hover:scale-110 hover:rotate-3"
-          >
-            <GithubIcon />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/pol-maynard-imbing-122a6315a/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transform transition-transform hover:scale-110 hover:-rotate-3"
-          >
-            <LinkdnIcon />
-          </a>
-          <a
-            download
-            href={"/pol-imbing.pdf"}
-            className="invisible w-0 md:visible md:w-max absolute md:relative md: disabled:bg-gray-600 flex items-center py-2 px-4 bg-blue-600 enabled:hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 ease-in-out transform enabled:hover:scale-105 enabled:hover:shadow-xl"
-          >
-            Download Resume
-          </a>
-        </animated.div>
+          <dl className="rise grid content-start gap-4 text-sm lg:col-span-4 lg:col-start-9" style={rise(240)}>
+            {profile.facts.map(fact => (
+              <div key={fact.label} className="grid grid-cols-[6.5rem_1fr] gap-4 border-t border-line pt-3">
+                <dt className="eyebrow pt-px">{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+            <div className="grid grid-cols-[6.5rem_1fr] items-center gap-4 border-t border-line pt-1">
+              <dt className="eyebrow">Elsewhere</dt>
+              <dd>
+                <SocialLinks className="-ml-3" />
+              </dd>
+            </div>
+          </dl>
+        </div>
 
-        <animated.a
-          style={resumeAnimation}
-          download
-          href={"/pol-imbing-v2.pdf"}
-          className="mt-3 visible md:invisible disabled:bg-gray-600 flex items-center py-2 px-4 bg-blue-600 enabled:hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 ease-in-out transform enabled:hover:scale-105 enabled:hover:shadow-xl"
-        >
-          Download Resume
-        </animated.a>
-      </animated.div>
+        <dl className="rise mt-14 grid grid-cols-2 border-t border-line sm:mt-16 lg:grid-cols-4" style={rise(300)}>
+          {impact.map((item, index) => (
+            <div
+              key={item.label}
+              className={`flex flex-col-reverse justify-end gap-2 py-8 pr-4 lg:border-l lg:border-line lg:pl-6 lg:first:border-l-0 lg:first:pl-0 ${
+                index % 2 ? "border-l border-line pl-5" : ""
+              } ${index > 1 ? "border-t border-line lg:border-t-0" : ""}`}
+            >
+              <dt className="text-sm leading-snug text-muted">{item.label}</dt>
+              <dd className="text-4xl font-semibold tracking-tight sm:text-5xl">{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </Container>
     </section>
   )
-}
-
-Hero.propTypes = {
-  innerRef: PropTypes.func.isRequired,
 }

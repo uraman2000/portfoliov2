@@ -27,3 +27,6 @@ dist-ssr
 
 # Python bytecode (from .claude/skills scripts)
 __pycache__/
+
+# Claude Code personal settings
+.claude/settings.local.json

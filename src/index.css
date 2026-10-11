@@ -2,10 +2,301 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Open Sans", sans-serif;
-  overflow-x: hidden;
+/* Design tokens as RGB channels so Tailwind can apply opacity (e.g. bg-accent/20).
+   Every text pair below is >= 4.5:1 and every form-field border >= 3:1 in both themes. */
+@layer base {
+  :root {
+    color-scheme: light;
+    --canvas: 250 250 250; /* #FAFAFA */
+    --surface: 255 255 255; /* #FFFFFF */
+    --fg: 9 9 11; /* #09090B */
+    --muted: 82 82 91; /* #52525B */
+    --subtle: 113 113 122; /* #71717A */
+    --line: 228 228 231; /* #E4E4E7 decorative dividers */
+    --field: 138 138 147; /* #8A8A93 form-field borders */
+    --accent: 15 118 110; /* #0F766E teal-700 */
+    --accent-hover: 17 94 89; /* #115E59 */
+    --accent-fg: 255 255 255;
+    --accent-soft: 240 253 250; /* #F0FDFA */
+    --success: 4 120 87; /* #047857 */
+    --danger: 185 28 28; /* #B91C1C */
+    --live: 5 150 105; /* #059669 */
+  }
+
+  .dark {
+    color-scheme: dark;
+    --canvas: 9 9 11; /* #09090B */
+    --surface: 19 19 22; /* #131316 */
+    --fg: 250 250 250; /* #FAFAFA */
+    --muted: 161 161 170; /* #A1A1AA */
+    --subtle: 139 139 148; /* #8B8B94 */
+    --line: 39 39 42; /* #27272A */
+    --field: 104 104 114; /* #686872 */
+    --accent: 45 212 191; /* #2DD4BF teal-400 */
+    --accent-hover: 94 234 212; /* #5EEAD4 */
+    --accent-fg: 4 47 46; /* #042F2E */
+    --accent-soft: 12 31 29; /* #0C1F1D */
+    --success: 52 211 153; /* #34D399 */
+    --danger: 248 113 113; /* #F87171 */
+    --live: 52 211 153; /* #34D399 */
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    /* Keeps anchor targets and keyboard-focused elements clear of the sticky header */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-fg antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.22);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+  }
 }
-html {
-  scroll-behavior: smooth;
+
+@layer components {
+  /* Type scale */
+  .display {
+    font-size: clamp(2.75rem, 1.15rem + 5.6vw, 5.75rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    font-weight: 600;
+  }
+
+  .heading-2 {
+    font-size: clamp(2rem, 1.3rem + 2.6vw, 3.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+  }
+
+  .heading-3 {
+    font-size: 1.375rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  @media (min-width: 640px) {
+    .heading-3 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .eyebrow {
+    @apply font-mono text-[0.8125rem] uppercase tracking-[0.08em] text-subtle;
+  }
+
+  /* Buttons and links */
+  .btn {
+    @apply inline-flex h-12 select-none items-center justify-center gap-2 rounded-sm px-5 text-[0.9375rem] font-medium transition-colors duration-150 ease-out;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+  }
+
+  .btn-secondary {
+    @apply border border-line bg-surface text-fg hover:border-fg/40;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-sm text-muted transition-colors duration-150 hover:bg-fg/5 hover:text-fg;
+  }
+
+  .link {
+    @apply inline-flex items-center gap-1.5 font-medium text-fg underline decoration-line decoration-1 underline-offset-[6px] transition-colors duration-150 hover:decoration-accent;
+  }
+
+  .nav-link {
+    @apply relative inline-flex h-10 items-center px-3 text-sm text-muted transition-colors duration-150 hover:text-fg;
+  }
+
+  .nav-link::after {
+    content: "";
+    @apply absolute inset-x-3 bottom-1.5 h-px origin-left scale-x-0 bg-accent transition-transform duration-200 ease-out;
+  }
+
+  .nav-link[aria-current="true"] {
+    @apply text-fg;
+  }
+
+  .nav-link[aria-current="true"]::after {
+    @apply scale-x-100;
+  }
+
+  /* Forms */
+  .field {
+    @apply block w-full rounded-sm border border-field bg-surface px-3.5 py-3 text-base text-fg transition-colors duration-150 placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
+  }
+
+  .field[aria-invalid="true"] {
+    @apply border-danger focus:ring-danger/20;
+  }
+
+  /* Lists with small square markers, a Swiss detail */
+  .square-list > li {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+
+  .square-list > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    background: rgb(var(--accent));
+  }
+
+  .skip-link {
+    @apply fixed left-4 top-4 z-[60] -translate-y-24 rounded-sm bg-accent px-4 py-3 text-sm font-medium text-accent-fg focus:translate-y-0;
+  }
+
+  .status-dot {
+    position: relative;
+    display: inline-flex;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: rgb(var(--live));
+  }
+
+  /* Faint column guides behind the hero; they line up with the impact-strip dividers */
+  .hero-guides {
+    background-image: linear-gradient(to right, rgb(var(--line)) 1px, transparent 1px);
+    background-size: 50% 100%;
+    border-right: 1px solid rgb(var(--line));
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
+    mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  }
+
+  @media (min-width: 1024px) {
+    .hero-guides {
+      background-size: 25% 100%;
+    }
+  }
+
+  /* Case-study layout: text beside media on desktop, media after the title on mobile */
+  .project-row {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-areas: "head" "media" "body";
+  }
+
+  .project-head {
+    grid-area: head;
+  }
+
+  .project-media {
+    grid-area: media;
+  }
+
+  .project-body {
+    grid-area: body;
+  }
+
+  @media (min-width: 1024px) {
+    .project-row {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas: "head media" "body media";
+      column-gap: 3.5rem;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Motion: short and subtle. With reduced motion everything renders in its final state. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rise {
+    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+
+  .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .btn svg {
+    transition: transform 150ms ease-out;
+  }
+
+  .btn:hover .nudge-x {
+    transform: translateX(2px);
+  }
+
+  .btn:hover .nudge-y {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@media print {
+  .reveal,
+  .rise {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }

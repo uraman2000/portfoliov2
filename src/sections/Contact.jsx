@@ -1,233 +1,272 @@
-/* eslint-disable react/no-unescaped-entities */
-import { useRef, useState } from "react"
-import Title from "../components/Title"
+import { useEffect, useRef, useState } from "react"
+import PropTypes from "prop-types"
 import emailjs from "@emailjs/browser"
-import Loader from "../components/Loader"
-import Envelope from "../assets/Envelope"
-import Phone from "../assets/Phone"
-import Footer from "./Footer"
-import { animated, useSpring } from '@react-spring/web'
-import { useScrollAnimation, useStaggeredAnimation } from '../hooks/useScrollAnimation'
-import PropTypes from 'prop-types'
+import Reveal from "../components/Reveal"
+import Row from "../components/Row"
+import Section from "../components/Section"
+import SocialLinks from "../components/SocialLinks"
+import {
+  CaretDown,
+  Check,
+  CheckCircle,
+  CircleNotch,
+  Copy,
+  DownloadSimple,
+  PaperPlaneTilt,
+  WarningCircle,
+} from "../components/icons"
+import { profile } from "../data/profile"
 
-export default function Contact({ innerRef }) {
-  const form = useRef()
-  const [isLoading, setIsLoading] = useState(false)
-  const [formSuccess, setFormSuccess] = useState(false)
-  
-  // Animation for the main container
-  const [containerRef, containerAnimation] = useScrollAnimation(0, 0.2)
-  
-  // Animation for contact info items
-  const contactItems = [
-    { id: 'email', icon: Envelope, title: 'Email:', content: 'Uraman2000@gmail.com' },
-    { id: 'phone', icon: Phone, title: 'Call:', content: '+63 960 211 2123' }
-  ]
-  const [contactRef, contactAnimations] = useStaggeredAnimation(contactItems, 100)
-  
-  // Animation for form
-  const [formRef, formAnimation] = useScrollAnimation(200, 0.3)
-  
-  // Success message animation
-  const successAnimation = useSpring({
-    opacity: formSuccess ? 1 : 0,
-    transform: formSuccess ? 'translateY(0px)' : 'translateY(-20px)',
-    config: { tension: 200, friction: 20 },
-  })
-  
-  // Form input animations
-  const [focusedInput, setFocusedInput] = useState(null)
-  
-  // Individual input animations
-  const nameAnimation = useSpring({
-    transform: focusedInput === 'name' ? 'scale(1.02)' : 'scale(1)',
-    boxShadow: focusedInput === 'name' 
-      ? '0 0 0 3px rgba(59, 130, 246, 0.1)' 
-      : '0 0 0 0px rgba(59, 130, 246, 0.1)',
-    config: { tension: 200, friction: 15 },
-  })
-  
-  const emailAnimation = useSpring({
-    transform: focusedInput === 'email' ? 'scale(1.02)' : 'scale(1)',
-    boxShadow: focusedInput === 'email' 
-      ? '0 0 0 3px rgba(59, 130, 246, 0.1)' 
-      : '0 0 0 0px rgba(59, 130, 246, 0.1)',
-    config: { tension: 200, friction: 15 },
-  })
-  
-  const subjectAnimation = useSpring({
-    transform: focusedInput === 'subject' ? 'scale(1.02)' : 'scale(1)',
-    boxShadow: focusedInput === 'subject' 
-      ? '0 0 0 3px rgba(59, 130, 246, 0.1)' 
-      : '0 0 0 0px rgba(59, 130, 246, 0.1)',
-    config: { tension: 200, friction: 15 },
-  })
-  
-  const messageAnimation = useSpring({
-    transform: focusedInput === 'message' ? 'scale(1.02)' : 'scale(1)',
-    boxShadow: focusedInput === 'message' 
-      ? '0 0 0 3px rgba(59, 130, 246, 0.1)' 
-      : '0 0 0 0px rgba(59, 130, 246, 0.1)',
-    config: { tension: 200, friction: 15 },
-  })
+const EMAILJS = {
+  serviceId: "service_oecsz2n",
+  templateId: "template_d3pj1vk",
+  publicKey: "VhBIqLIiWJs-Isbt7",
+}
 
-  const sendEmail = e => {
-    e.preventDefault()
-    setIsLoading(true)
-    setFormSuccess(false)
-    
-    emailjs
-      .sendForm(
-        "service_tezgr8s",
-        "template_d3pj1vk",
-        form.current,
-        "VhBIqLIiWJs-Isbt7"
-      )
-      .then(
-        result => {
-          console.log(result.text)
-          e.target.reset()
-          setIsLoading(false)
-          setFormSuccess(true)
-          setTimeout(() => setFormSuccess(false), 5000)
-        },
-        error => {
-          console.log(error.text)
-          e.target.reset()
-          setIsLoading(false)
-        }
-      )
+// The selected topic is sent as `subject`, so the existing EmailJS template keeps working.
+const TOPICS = ["Job opportunity", "Freelance project", "Something else"]
+const EMPTY_FORM = { name: "", email: "", subject: TOPICS[0], message: "" }
+const REQUIRED_FIELDS = ["name", "email", "message"]
+
+function validate(field, value) {
+  const trimmed = value.trim()
+  switch (field) {
+    case "name":
+      return trimmed ? "" : "Please enter your name."
+    case "email":
+      if (!trimmed) return "Please enter your email address."
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? "" : "Please enter a valid email, like name@company.com."
+    case "message":
+      return trimmed.length >= 10 ? "" : "Please write at least a sentence (10+ characters)."
+    default:
+      return ""
   }
-  
+}
+
+function Field({ id, label, error, className = "", children }) {
   return (
-    <div
-      ref={innerRef}
-      id="contact"
-      className="h-max flex flex-col justify-between "
-    >
-      <section className="flex justify-center items-center pt-16">
-        <animated.div 
-          ref={containerRef}
-          style={containerAnimation}
-          className="w-10/12 md:w-11/12 xl:w-4/5"
-        >
-          <Title text="CONTACT" />
-          <div className="md:mt-0 mt-10 flex flex-col md:flex-row">
-            <div className="w-full flex md:justify-center">
-              <div ref={contactRef} className=" flex justify-evenly flex-col gap-10">
-                {contactItems.map((item, index) => (
-                  <animated.div 
-                    key={item.id}
-                    style={contactAnimations[index]}
-                    className="flex gap-3 items-center transform transition-transform hover:scale-105"
-                  >
-                    <div className="text-blue-500 hover:text-blue-600 transition-colors duration-300">
-                      <item.icon />
-                    </div>
-                    <div className="">
-                      <h4 className="text-xl text-gray-600 font-bold">{item.title}</h4>
-                      <p className="text-sm text-gray-600">{item.content}</p>
-                    </div>
-                  </animated.div>
-                ))}
-              </div>
-            </div>
-            <animated.div 
-              ref={formRef}
-              style={formAnimation}
-              className="w-full space-y-8 p-6"
-            >
-              {formSuccess && (
-                <animated.div 
-                  style={successAnimation}
-                  className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4"
-                >
-                  Message sent successfully! I'll get back to you soon.
-                </animated.div>
-              )}
-              
-              <form className="space-y-4" ref={form} onSubmit={sendEmail}>
-                <div className="space-y-6">
-                  <div className="flex space-x-4">
-                    <animated.input
-                      style={nameAnimation}
-                      type="text"
-                      placeholder="Name"
-                      id="name"
-                      name="name"
-                      autoComplete="name"
-                      required
-                      onFocus={() => setFocusedInput('name')}
-                      onBlur={() => setFocusedInput(null)}
-                      className="focus:outline-none w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 transition-all duration-300"
-                    />
-
-                    <animated.input
-                      style={emailAnimation}
-                      type="email"
-                      placeholder="Email"
-                      id="email"
-                      name="email"
-                      autoComplete="email"
-                      required
-                      onFocus={() => setFocusedInput('email')}
-                      onBlur={() => setFocusedInput(null)}
-                      className="focus:outline-none w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 transition-all duration-300"
-                    />
-                  </div>
-                  <div>
-                    <animated.input
-                      style={subjectAnimation}
-                      type="text"
-                      placeholder="Subject"
-                      id="subject"
-                      name="subject"
-                      required
-                      onFocus={() => setFocusedInput('subject')}
-                      onBlur={() => setFocusedInput(null)}
-                      className="focus:outline-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 transition-all duration-300"
-                    />
-                  </div>
-                  <div>
-                    <animated.textarea
-                      style={messageAnimation}
-                      id="message"
-                      name="message"
-                      placeholder="Message"
-                      rows="4"
-                      required
-                      onFocus={() => setFocusedInput('message')}
-                      onBlur={() => setFocusedInput(null)}
-                      className="focus:outline-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-600 transition-all duration-300"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="disabled:bg-gray-600 flex items-center py-2 px-4 bg-blue-600 enabled:hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition-all duration-300 ease-in-out transform enabled:hover:scale-105 enabled:hover:shadow-xl"
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader /> Sending ....
-                      </>
-                    ) : (
-                      "Send Message"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </animated.div>
-          </div>
-        </animated.div>
-      </section>
-
-      <Footer />
+    <div className={className}>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium">
+        {label}
+      </label>
+      {children}
+      {error ? (
+        <p id={`${id}-error`} className="mt-2 flex items-center gap-1.5 text-sm text-danger">
+          <WarningCircle size={16} aria-hidden="true" className="shrink-0" />
+          {error}
+        </p>
+      ) : null}
     </div>
   )
 }
 
-Contact.propTypes = {
-  innerRef: PropTypes.func.isRequired,
+Field.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired,
+}
+
+export default function Contact() {
+  const formRef = useRef(null)
+  const [values, setValues] = useState(EMPTY_FORM)
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState("idle") // idle | sending | success | error
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(timer)
+  }, [copied])
+
+  const fieldProps = name => ({
+    id: name,
+    name,
+    value: values[name],
+    "aria-invalid": errors[name] ? true : undefined,
+    "aria-describedby": errors[name] ? `${name}-error` : undefined,
+    onChange: event => {
+      const { value } = event.target
+      setValues(current => ({ ...current, [name]: value }))
+      if (errors[name]) setErrors(current => ({ ...current, [name]: validate(name, value) }))
+      if (status === "success") setStatus("idle")
+    },
+    onBlur: event => {
+      if (REQUIRED_FIELDS.includes(name)) {
+        const { value } = event.target
+        setErrors(current => ({ ...current, [name]: validate(name, value) }))
+      }
+    },
+  })
+
+  const onSubmit = async event => {
+    event.preventDefault()
+    const nextErrors = Object.fromEntries(REQUIRED_FIELDS.map(field => [field, validate(field, values[field])]))
+    setErrors(nextErrors)
+
+    const firstInvalid = REQUIRED_FIELDS.find(field => nextErrors[field])
+    if (firstInvalid) {
+      formRef.current.elements[firstInvalid].focus()
+      return
+    }
+
+    setStatus("sending")
+    try {
+      await emailjs.sendForm(EMAILJS.serviceId, EMAILJS.templateId, formRef.current, EMAILJS.publicKey)
+      setValues(EMPTY_FORM)
+      setStatus("success")
+    } catch {
+      // Keep what the visitor typed so they can retry or copy it into an email.
+      setStatus("error")
+    }
+  }
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email)
+      setCopied(true)
+    } catch {
+      // Clipboard access can be blocked; the mailto link next to the button still works.
+    }
+  }
+
+  return (
+    <Section
+      id="contact"
+      index="06"
+      label="Contact"
+      title="Let's build something together."
+      intro="Hiring for a senior or lead role, or need help shipping an AI feature? Send a note and I'll get back to you."
+    >
+      <Row
+        aside={
+          <Reveal className="space-y-8">
+            <div>
+              <p className="eyebrow">Email</p>
+              <div className="mt-1 flex items-center">
+                <a href={`mailto:${profile.email}`} className="link">
+                  {profile.email}
+                </a>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="icon-btn"
+                  aria-label={copied ? "Email address copied" : "Copy email address"}
+                  title={copied ? "Copied" : "Copy email address"}
+                >
+                  {copied ? (
+                    <Check size={18} className="text-success" aria-hidden="true" />
+                  ) : (
+                    <Copy size={18} aria-hidden="true" />
+                  )}
+                </button>
+                <span role="status" className="sr-only">
+                  {copied ? "Email address copied to clipboard" : ""}
+                </span>
+              </div>
+            </div>
+            <div>
+              <p className="eyebrow">Elsewhere</p>
+              <SocialLinks className="-ml-3 mt-1" />
+            </div>
+            <div>
+              <p className="eyebrow">Resume</p>
+              <a href={profile.resume.href} download={profile.resume.fileName} className="link mt-3">
+                <DownloadSimple size={16} aria-hidden="true" />
+                Download PDF
+              </a>
+            </div>
+          </Reveal>
+        }
+      >
+        <Reveal delay={60}>
+          <form ref={formRef} onSubmit={onSubmit} noValidate className="grid gap-6 sm:grid-cols-2">
+            <Field id="name" label="Name" error={errors.name}>
+              <input {...fieldProps("name")} type="text" autoComplete="name" required className="field" />
+            </Field>
+
+            <Field id="email" label="Email" error={errors.email}>
+              <input
+                {...fieldProps("email")}
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                required
+                className="field"
+              />
+            </Field>
+
+            <Field id="subject" label="What's this about?" className="sm:col-span-2">
+              <div className="relative">
+                <select {...fieldProps("subject")} className="field cursor-pointer appearance-none pr-10">
+                  {TOPICS.map(topic => (
+                    <option key={topic} value={topic}>
+                      {topic}
+                    </option>
+                  ))}
+                </select>
+                <CaretDown
+                  size={16}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted"
+                />
+              </div>
+            </Field>
+
+            <Field id="message" label="Message" error={errors.message} className="sm:col-span-2">
+              <textarea
+                {...fieldProps("message")}
+                rows={6}
+                required
+                placeholder="A few lines about the role or project, timeline and anything else useful."
+                className="field resize-y"
+              />
+            </Field>
+
+            <div className="flex flex-col-reverse gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+              <div aria-live="polite" className="text-sm">
+                {status === "success" ? (
+                  <p className="flex items-center gap-2 text-success">
+                    <CheckCircle size={18} aria-hidden="true" className="shrink-0" />
+                    Thanks, your message is on its way. I&apos;ll get back to you soon.
+                  </p>
+                ) : null}
+                {status === "error" ? (
+                  <p className="flex items-start gap-2 text-danger">
+                    <WarningCircle size={18} aria-hidden="true" className="mt-px shrink-0" />
+                    <span>
+                      Your message couldn&apos;t be sent. Please try again, or email me at{" "}
+                      <a href={`mailto:${profile.email}`} className="underline underline-offset-2">
+                        {profile.email}
+                      </a>
+                      .
+                    </span>
+                  </p>
+                ) : null}
+              </div>
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="btn btn-primary shrink-0 disabled:cursor-wait disabled:opacity-80"
+              >
+                {status === "sending" ? (
+                  <>
+                    <CircleNotch size={18} className="motion-safe:animate-spin" aria-hidden="true" />
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    Send message
+                    <PaperPlaneTilt size={18} className="nudge-x" aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </Reveal>
+      </Row>
+    </Section>
+  )
 }
