@@ -1,34 +1,67 @@
+// Groups mirror "Technical Skills" in public/pol-imbing-v4.pdf; "Domains" comes from its summary and roles.
 export const skillGroups = [
   {
-    label: "AI & LLMs",
-    items: ["Anthropic Claude API", "Multimodal pipelines (PDF + image)", "Prompt caching", "Model routing", "AI evaluation & QA"],
+    label: "AI / LLM",
+    items: [
+      "Anthropic Claude API",
+      "Streaming & extended thinking",
+      "Prompt caching",
+      "PDF & vision inputs",
+      "Prompt engineering",
+      "LLM browser agents",
+      "AI accuracy testing",
+    ],
+  },
+  {
+    label: "Languages",
+    items: ["TypeScript", "JavaScript", "Python", "PHP", "Java", "Kotlin"],
   },
   {
     label: "Frontend",
-    items: ["React", "TypeScript", "Next.js", "Redux Toolkit", "Tailwind CSS", "Material UI", "Ant Design"],
+    items: ["React", "Next.js", "Redux Toolkit", "Material UI", "Tailwind CSS", "Ant Design", "Vite", "Styled Components"],
   },
   {
-    label: "Backend & data",
-    items: ["NestJS", "Node.js", "Express", "PostgreSQL", "TypeORM", "Redis", "SQL Server", "MongoDB", "Python / Flask"],
+    label: "Backend",
+    items: ["Node.js", "NestJS", "Express.js", "REST APIs", "BullMQ", "TypeORM", "Flask", ".NET Core"],
   },
   {
-    label: "Cloud & DevOps",
-    items: ["Azure", "Terraform", "Docker", "GitHub Actions", "CI/CD pipelines", "Vercel", "AWS"],
+    label: "Databases",
+    items: ["PostgreSQL", "Redis", "MySQL", "MongoDB", "Microsoft SQL Server"],
   },
   {
-    label: "Quality & process",
-    items: ["Vitest", "Jest", "Mocha & Chai", "E2E test plans", "Code review", "Scrum"],
+    label: "Cloud / DevOps",
+    items: [
+      "Microsoft Azure",
+      "AWS",
+      "Terraform",
+      "Docker",
+      "nginx",
+      "GitHub Actions",
+      "CI/CD",
+      "Azure Key Vault",
+      "Azure Monitor",
+      "Git",
+      "Vercel",
+    ],
+  },
+  {
+    label: "Testing",
+    items: ["Jest", "Vitest", "Puppeteer", "Mocha", "Chai"],
+  },
+  {
+    label: "Standards",
+    items: ["HL7 FHIR R5"],
   },
   {
     label: "Domains",
-    items: ["Healthcare (FHIR R5, HL7)", "Fintech & lending", "Compliance", "E-commerce", "Travel"],
+    items: ["Financial services", "Healthcare", "Compliance", "E-commerce", "Travel"],
   },
 ]
 
 export const education = {
-  degree: "BS Computer Science",
+  degree: "Bachelor of Science in Computer Science",
   school: "AMA Computer College, Batangas City",
-  year: "2017",
+  period: "Jun 2013 – Mar 2017",
 }
 
 export const certifications = [
@@ -39,7 +72,7 @@ export const certifications = [
     href: "https://www.udemy.com/certificate/UC-50f7df3a-7d44-441b-a4d4-d49a6e7e8e0c/",
   },
   {
-    title: "HL7 Standards & HealthIT Interoperability",
+    title: "Beginners Guide to HL7 Standards & Health IT Interoperability",
     issuer: "Udemy",
     year: "2023",
     href: "https://www.udemy.com/certificate/UC-831a2cc1-de29-48a2-a2f3-c05c3f8595e7/",

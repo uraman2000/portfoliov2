@@ -26,17 +26,18 @@ export default function About() {
         <Reveal delay={60}>
           <div className="max-w-2xl space-y-5 text-lg leading-relaxed text-muted text-pretty">
             <p>
-              I&apos;ve been shipping software since 2018: Android apps first, then full-stack systems for a lending
-              company, then several years as a senior React developer on healthcare, compliance and e-commerce products
-              for international teams.
+              I started in 2018 building Android apps, moved into full-stack work at a financial services company,
+              built enterprise NestJS APIs for travel systems at Accenture, then spent nearly three years as a senior
+              React developer on e-commerce, compliance and healthcare products.
             </p>
             <p>
-              Today I&apos;m AI Team Lead and Solutions Architect at YML Group. I design Claude-powered features, set the
-              architecture, review code, own our Azure infrastructure and run the team&apos;s sprints as Scrum Master.
+              Since February 2026 I&apos;ve been AI Team Lead and Solutions Architect at YML Group, where I&apos;m the
+              primary engineer on an AI analysis platform for the Australian financial services market. I took it from
+              first commit to production, and I run the team&apos;s sprints as Scrum Master.
             </p>
             <p>
-              I care about software that&apos;s secure by default, tested where it matters, and simple enough for the
-              next developer to change with confidence. If that sounds like your team,{" "}
+              I care about software that holds up in production: AI output grounded in deterministic data, tests that
+              gate every release, and infrastructure kept in code. If that sounds like your team,{" "}
               <a href="#contact" className="link">
                 let&apos;s talk
               </a>
@@ -47,18 +48,18 @@ export default function About() {
           <dl className="mt-12 grid gap-x-8 gap-y-8 border-t border-line pt-8 sm:grid-cols-2">
             <div>
               <dt className="eyebrow">Based in</dt>
-              <dd className="mt-2">Philippines, working remotely</dd>
+              <dd className="mt-2">Philippines</dd>
             </div>
             <div>
               <dt className="eyebrow">Experience</dt>
-              <dd className="mt-2">8+ years, since 2018</dd>
+              <dd className="mt-2">8+ years in software development</dd>
             </div>
             <div>
               <dt className="eyebrow">Education</dt>
               <dd className="mt-2">
                 {education.degree}
                 <span className="block text-sm text-muted">
-                  {education.school}, {education.year}
+                  {education.school} · {education.period}
                 </span>
               </dd>
             </div>

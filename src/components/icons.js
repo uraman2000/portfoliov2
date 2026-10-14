@@ -1,4 +1,5 @@
 // Phosphor icons, imported per icon so only these end up in the bundle.
+export { ArrowDown } from "@phosphor-icons/react/dist/csr/ArrowDown"
 export { ArrowRight } from "@phosphor-icons/react/dist/csr/ArrowRight"
 export { ArrowUp } from "@phosphor-icons/react/dist/csr/ArrowUp"
 export { ArrowUpRight } from "@phosphor-icons/react/dist/csr/ArrowUpRight"

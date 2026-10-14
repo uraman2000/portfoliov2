@@ -9,7 +9,9 @@ export default function Footer() {
       <Container className="flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="font-semibold tracking-tight">{profile.name}</p>
-          <p className="mt-1 text-sm text-muted">{profile.role}</p>
+          <p className="mt-1 text-sm text-muted">
+            {profile.title} · {profile.role}
+          </p>
         </div>
         <SocialLinks className="-ml-3 sm:-mr-3 sm:ml-0" />
       </Container>

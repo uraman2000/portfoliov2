@@ -4,7 +4,7 @@ import Reveal from "../components/Reveal"
 import Row from "../components/Row"
 import Section from "../components/Section"
 import TagList from "../components/TagList"
-import { CaretDown, DownloadSimple } from "../components/icons"
+import { ArrowUp, CaretDown, DownloadSimple } from "../components/icons"
 import { experience } from "../data/experience"
 import { profile } from "../data/profile"
 
@@ -40,6 +40,12 @@ function RoleItem({ role }) {
             ))}
           </ul>
           <TagList items={role.stack} className="mt-6" />
+          {role.caseStudy ? (
+            <a href={role.caseStudy} className="link mt-4 min-h-[44px]">
+              Read the full case study
+              <ArrowUp size={14} aria-hidden="true" />
+            </a>
+          ) : null}
         </Row>
       </Reveal>
     </li>
@@ -53,6 +59,7 @@ RoleItem.propTypes = {
     period: PropTypes.string.isRequired,
     domain: PropTypes.string.isRequired,
     current: PropTypes.bool,
+    caseStudy: PropTypes.string,
     highlights: PropTypes.arrayOf(PropTypes.string).isRequired,
     stack: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
@@ -67,7 +74,7 @@ export default function Experience() {
       index="03"
       label="Experience"
       title="From Android apps to AI platforms."
-      intro="Eight years of shipping across healthcare, compliance, e-commerce, travel and lending, most recently as a team lead."
+      intro="8+ years in software development, including 7+ years of React and Node.js for healthcare, financial services, e-commerce and travel clients."
     >
       <ol>
         {recentRoles.map(role => (

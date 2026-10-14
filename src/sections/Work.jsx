@@ -1,12 +1,185 @@
 import PropTypes from "prop-types"
 import ExternalLink from "../components/ExternalLink"
 import Reveal from "../components/Reveal"
+import Row from "../components/Row"
 import Section from "../components/Section"
+import StatRow from "../components/StatRow"
 import TagList from "../components/TagList"
-import { LockSimple } from "../components/icons"
-import { featuredProject, projects } from "../data/projects"
+import { ArrowDown, ArrowRight } from "../components/icons"
+import { clientSites, flagship } from "../data/projects"
 
 const hostname = href => new URL(href).hostname.replace(/^www\./, "")
+
+function Label({ children }) {
+  return <p className="eyebrow lg:pt-1">{children}</p>
+}
+
+Label.propTypes = {
+  children: PropTypes.node.isRequired,
+}
+
+// Before → after as one headline figure: the "before" stays muted, the result carries the weight.
+function OutcomeTile({ outcome }) {
+  return (
+    <figure className="rounded-md border border-line bg-accent-soft p-6 sm:p-8">
+      <p className="flex flex-wrap items-end gap-x-5 gap-y-3">
+        <span className="flex flex-col">
+          <span className="eyebrow">Before</span>
+          <span className="mt-2 text-2xl font-semibold tracking-tight text-muted sm:text-3xl">{outcome.before}</span>
+        </span>
+        <ArrowRight size={24} className="mb-1 text-subtle sm:mb-1.5" aria-hidden="true" />
+        <span className="flex flex-col">
+          <span className="eyebrow">After</span>
+          <span className="mt-2 text-5xl font-semibold tracking-tight sm:text-6xl">{outcome.after}</span>
+        </span>
+        <span className="mb-1.5 inline-flex items-center gap-1 rounded-sm bg-success/10 px-2 py-1 text-sm font-medium text-success sm:mb-2.5">
+          <ArrowDown size={14} weight="bold" aria-hidden="true" />
+          {outcome.change}
+        </span>
+      </p>
+      <figcaption className="mt-6 max-w-xl text-[0.9375rem] leading-relaxed text-muted">{outcome.caption}</figcaption>
+    </figure>
+  )
+}
+
+OutcomeTile.propTypes = {
+  outcome: PropTypes.shape({
+    before: PropTypes.string.isRequired,
+    after: PropTypes.string.isRequired,
+    change: PropTypes.string.isRequired,
+    caption: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
+function Pipeline({ pipeline }) {
+  const lastIndex = pipeline.steps.length - 1
+
+  return (
+    <div>
+      <ol className="grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        {pipeline.steps.map((step, index) => (
+          <li key={step.verb} className="relative bg-surface p-5 sm:p-6">
+            <p className="font-mono text-xs uppercase tracking-[0.08em] text-accent">
+              {String(index + 1).padStart(2, "0")} · {step.verb}
+            </p>
+            <p className="mt-3 font-medium leading-snug">{step.detail}</p>
+            {index < lastIndex ? (
+              <span
+                aria-hidden="true"
+                className="absolute -right-3 top-1/2 z-10 hidden h-6 w-6 -translate-y-1/2 place-items-center rounded-full border border-line bg-canvas text-subtle lg:grid"
+              >
+                <ArrowRight size={12} weight="bold" />
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 max-w-3xl text-[0.9375rem] leading-relaxed text-muted text-pretty">{pipeline.caption}</p>
+    </div>
+  )
+}
+
+Pipeline.propTypes = {
+  pipeline: PropTypes.shape({
+    steps: PropTypes.arrayOf(PropTypes.shape({ verb: PropTypes.string, detail: PropTypes.string })).isRequired,
+    caption: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
+function Highlights({ groups }) {
+  return (
+    <div className="divide-y divide-line border-y border-line">
+      {groups.map(group => (
+        <div key={group.title} className="grid gap-3 py-6 md:grid-cols-[11rem_1fr] md:gap-8">
+          <h4 className="eyebrow text-fg md:pt-0.5">{group.title}</h4>
+          <ul className="square-list space-y-2.5 text-[0.9375rem] leading-relaxed text-muted">
+            {group.items.map(item => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+Highlights.propTypes = {
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({ title: PropTypes.string, items: PropTypes.arrayOf(PropTypes.string) })
+  ).isRequired,
+}
+
+function Flagship({ project }) {
+  const titleId = `${project.id}-title`
+
+  return (
+    <article id={project.id} aria-labelledby={titleId} className="space-y-14 border-t border-line pt-10 sm:space-y-16 sm:pt-12">
+      <Reveal>
+        <Row
+          aside={
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 lg:flex-col lg:items-start">
+              <p className="font-mono text-sm">{project.period}</p>
+              <p className="eyebrow">{project.client}</p>
+              <span className="rounded-sm bg-accent px-1.5 py-0.5 font-mono text-xs uppercase tracking-[0.08em] text-accent-fg">
+                Current
+              </span>
+            </div>
+          }
+        >
+          <h3 id={titleId} className="text-[1.75rem] font-semibold leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
+            {project.title}
+          </h3>
+          <p className="mt-4 text-sm">
+            <span className="text-subtle">Role: </span>
+            <span className="font-medium">{project.role}</span>
+          </p>
+          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted text-pretty">{project.summary}</p>
+        </Row>
+      </Reveal>
+
+      <Reveal>
+        <Row aside={<Label>Outcome</Label>}>
+          <OutcomeTile outcome={project.outcome} />
+        </Row>
+      </Reveal>
+
+      <Reveal>
+        <Row aside={<Label>How it works</Label>}>
+          <Pipeline pipeline={project.pipeline} />
+        </Row>
+      </Reveal>
+
+      <Reveal>
+        <Row aside={<Label>What I built</Label>}>
+          <Highlights groups={project.highlights} />
+        </Row>
+      </Reveal>
+
+      <Reveal>
+        <Row aside={<Label>By the numbers</Label>}>
+          <StatRow items={project.metrics} />
+          <TagList items={project.stack} className="mt-8" />
+        </Row>
+      </Reveal>
+    </article>
+  )
+}
+
+Flagship.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    client: PropTypes.string.isRequired,
+    period: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+    summary: PropTypes.string.isRequired,
+    outcome: PropTypes.object.isRequired,
+    pipeline: PropTypes.object.isRequired,
+    highlights: PropTypes.array.isRequired,
+    metrics: PropTypes.array.isRequired,
+    stack: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+}
 
 function Screenshot({ image, href }) {
   return (
@@ -37,109 +210,44 @@ Screenshot.propTypes = {
   href: PropTypes.string.isRequired,
 }
 
-// Proprietary work has no screenshot, so it gets a metrics panel with the same 2:1 footprint.
-function MetricsPanel({ project }) {
+function ClientSites({ sites }) {
   return (
-    <div className="flex flex-col justify-between gap-8 rounded-md border border-line bg-accent-soft p-6 sm:p-8 lg:aspect-[2/1]">
-      <ul aria-label="Capabilities" className="flex flex-wrap gap-1.5">
-        {project.capabilities.map(item => (
-          <li
-            key={item}
-            className="rounded-sm border border-accent/30 px-2 py-1 font-mono text-xs leading-none text-accent"
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-      <dl className="grid gap-6 sm:grid-cols-3">
-        {project.metrics.map(metric => (
-          <div key={metric.label} className="flex flex-col-reverse justify-end gap-2 border-t border-accent/25 pt-4">
-            <dt className="text-sm leading-snug text-muted">{metric.label}</dt>
-            <dd className="text-4xl font-semibold tracking-tight sm:text-5xl">{metric.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <p className="flex items-center gap-2 text-sm text-muted">
-        <LockSimple size={16} aria-hidden="true" />
-        {project.note}
-      </p>
-    </div>
-  )
-}
-
-MetricsPanel.propTypes = {
-  project: PropTypes.shape({
-    capabilities: PropTypes.arrayOf(PropTypes.string).isRequired,
-    metrics: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, label: PropTypes.string })).isRequired,
-    note: PropTypes.string.isRequired,
-  }).isRequired,
-}
-
-function ProjectRow({ project, featured = false }) {
-  const titleId = `${project.id}-title`
-
-  return (
-    <li className="border-t border-line py-12 sm:py-16">
-      <Reveal as="article" aria-labelledby={titleId} className="project-row group">
-        <header className="project-head">
-          <p className="eyebrow flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span>{project.period}</span>
-            <span aria-hidden="true">·</span>
-            <span>{project.client}</span>
-            {featured ? (
-              <span className="ml-1 rounded-sm bg-accent px-1.5 py-0.5 text-accent-fg">Current</span>
-            ) : null}
-          </p>
-          <h3 id={titleId} className="heading-3 mt-4 text-balance">
-            {project.title}
-          </h3>
-          <p className="mt-3 leading-relaxed text-muted text-pretty">{project.summary}</p>
-        </header>
-
-        <div className="project-media lg:self-start">
-          {featured ? <MetricsPanel project={project} /> : <Screenshot image={project.image} href={project.links[0].href} />}
-        </div>
-
-        <div className="project-body">
-          <p className="text-sm">
-            <span className="text-subtle">Role: </span>
-            <span className="font-medium">{project.role}</span>
-          </p>
-          <ul className="square-list mt-5 space-y-2.5 text-[0.9375rem] leading-relaxed text-muted">
-            {project.outcomes.map(outcome => (
-              <li key={outcome}>{outcome}</li>
-            ))}
-          </ul>
-          <TagList items={project.stack} className="mt-6" />
-          {project.links?.length ? (
-            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3">
-              {project.links.map(link => (
+    <div className="mt-24 border-t border-line pt-10 sm:pt-12">
+      <Reveal>
+        <Row aside={<Label>Client sites</Label>}>
+          <h3 className="heading-3">Earlier client sites I&apos;ve worked on</h3>
+        </Row>
+      </Reveal>
+      <ul className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        {sites.map((site, index) => (
+          <Reveal as="li" key={site.id} delay={(index % 3) * 60} className="group">
+            <Screenshot image={site.image} href={site.links[0].href} />
+            <h4 className="mt-5 text-lg font-semibold tracking-tight">{site.title}</h4>
+            <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-muted">{site.description}</p>
+            <div className="mt-1 flex flex-wrap gap-x-5">
+              {site.links.map(link => (
                 <ExternalLink key={link.href} href={link.href} className="link min-h-[44px]">
                   {link.label}
                 </ExternalLink>
               ))}
             </div>
-          ) : null}
-        </div>
-      </Reveal>
-    </li>
+          </Reveal>
+        ))}
+      </ul>
+    </div>
   )
 }
 
-ProjectRow.propTypes = {
-  project: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    client: PropTypes.string.isRequired,
-    period: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    summary: PropTypes.string.isRequired,
-    outcomes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    stack: PropTypes.arrayOf(PropTypes.string).isRequired,
-    image: PropTypes.object,
-    links: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, href: PropTypes.string })),
-  }).isRequired,
-  featured: PropTypes.bool,
+ClientSites.propTypes = {
+  sites: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      image: PropTypes.object.isRequired,
+      links: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, href: PropTypes.string })).isRequired,
+    })
+  ).isRequired,
 }
 
 export default function Work() {
@@ -149,14 +257,10 @@ export default function Work() {
       index="01"
       label="Work"
       title="Selected work"
-      intro="Case studies from recent roles: what each product does, my part in it, and what it delivered."
+      intro="A flagship case study from my current role, then earlier client sites I've worked on."
     >
-      <ol className="border-b border-line">
-        <ProjectRow project={featuredProject} featured />
-        {projects.map(project => (
-          <ProjectRow key={project.id} project={project} />
-        ))}
-      </ol>
+      <Flagship project={flagship} />
+      <ClientSites sites={clientSites} />
     </Section>
   )
 }

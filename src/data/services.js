@@ -1,12 +1,13 @@
+// Every capability below is backed by public/pol-imbing-v4.pdf
 export const services = [
   {
     id: "ai",
     title: "AI features & LLM integration",
-    description: "Useful, measurable AI inside your product, built on the Claude API.",
+    description: "Claude-powered features that stay grounded in your real data.",
     points: [
-      "Multimodal document processing (PDF + image)",
-      "Prompt caching and model routing to cut latency",
-      "Evaluation suites for non-deterministic output",
+      "Claude API: streaming, extended thinking, prompt caching, PDF and vision inputs",
+      "Grounding guards and AI accuracy test suites",
+      "LLM-driven browser agents for data collection",
     ],
   },
   {
@@ -14,19 +15,19 @@ export const services = [
     title: "Full-stack web applications",
     description: "Production apps from database to UI, with security designed in from day one.",
     points: [
-      "React + TypeScript frontends",
-      "NestJS APIs on PostgreSQL and Redis",
-      "Hardened auth flows and audit logging",
+      "React and Next.js frontends in TypeScript",
+      "NestJS APIs on PostgreSQL, Redis and BullMQ",
+      "Secure auth, rate limiting and audit logging",
     ],
   },
   {
     id: "cloud",
     title: "Cloud, DevOps & CI/CD",
-    description: "Infrastructure you can reproduce and pipelines you can trust.",
+    description: "Infrastructure you can reproduce and releases you can trust.",
     points: [
-      "Azure App Service and VMs, managed with Terraform",
-      "Docker and GitHub Actions for QA and production",
-      "SSL, DNS and production troubleshooting",
+      "Azure infrastructure as code with Terraform",
+      "Secrets in Key Vault, monitoring with Azure Monitor",
+      "GitHub Actions and Docker with health-checked rollbacks",
     ],
   },
   {
@@ -34,9 +35,9 @@ export const services = [
     title: "Technical leadership",
     description: "A steady lead for teams that need to ship without cutting corners.",
     points: [
-      "Architecture and code-review standards",
-      "Scrum facilitation and sprint planning",
-      "Mentoring and testing strategy",
+      "Team lead and Scrum Master",
+      "Code reviews, mentoring and pair programming",
+      "Testing strategy: unit, integration and regression gates",
     ],
   },
 ]

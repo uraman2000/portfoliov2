@@ -1,5 +1,6 @@
 import Container from "../components/Container"
 import SocialLinks from "../components/SocialLinks"
+import StatRow from "../components/StatRow"
 import { ArrowRight, DownloadSimple } from "../components/icons"
 import { impact, profile } from "../data/profile"
 
@@ -27,7 +28,7 @@ export default function Hero() {
 
         <h1 id="hero-heading" className="mt-8">
           <span className="rise eyebrow block" style={rise(60)}>
-            {profile.name} — {profile.role}
+            {profile.name} — {profile.title}
           </span>
           <span className="rise display mt-5 block text-balance" style={rise(120)}>
             <span className="sm:block">{headlineStart}</span>{" "}
@@ -35,7 +36,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        <div className="mt-10 grid gap-12 lg:mt-12 lg:grid-cols-12 lg:gap-x-8">
+        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-x-8">
           <div className="rise lg:col-span-7" style={rise(180)}>
             <p className="max-w-2xl text-lg leading-relaxed text-muted text-pretty sm:text-xl sm:leading-relaxed">
               {profile.lead}
@@ -68,19 +69,7 @@ export default function Hero() {
           </dl>
         </div>
 
-        <dl className="rise mt-14 grid grid-cols-2 border-t border-line sm:mt-16 lg:grid-cols-4" style={rise(300)}>
-          {impact.map((item, index) => (
-            <div
-              key={item.label}
-              className={`flex flex-col-reverse justify-end gap-2 py-8 pr-4 lg:border-l lg:border-line lg:pl-6 lg:first:border-l-0 lg:first:pl-0 ${
-                index % 2 ? "border-l border-line pl-5" : ""
-              } ${index > 1 ? "border-t border-line lg:border-t-0" : ""}`}
-            >
-              <dt className="text-sm leading-snug text-muted">{item.label}</dt>
-              <dd className="text-4xl font-semibold tracking-tight sm:text-5xl">{item.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <StatRow items={impact} className="rise mt-14 sm:mt-16" style={rise(300)} />
       </Container>
     </section>
   )
