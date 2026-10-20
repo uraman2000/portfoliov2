@@ -2,10 +2,193 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Open Sans", sans-serif;
-  overflow-x: hidden;
+/* Green Glass design tokens. tailwind.config.js maps them to class names (bg-page, text-ink,
+   border-line, ...), so light and dark themes share one set of classes. */
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: #FBF7F2;
+    --bg2: #F3EADF;
+    --ink: #1C1713;
+    --muted: #5A5047;
+    --line: rgba(28, 23, 19, 0.1);
+    --glass: rgba(255, 255, 255, 0.58);
+    --glass-b: rgba(255, 255, 255, 0.9);
+    --shadow: 0 24px 60px -24px rgba(0, 90, 30, 0.24);
+    --accent: #008000;
+    --accent-strong: #006400;
+    --grad: linear-gradient(100deg, #006B00 0%, #008000 35%, #A16207 65%, #006B00 100%);
+    --dot: rgba(28, 23, 19, 0.07);
+    --term: #16110D;
+    --term-ink: #F3E8DC;
+    --term-mute: #A8998A;
+    --orb-opacity: 0.55;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0F0B09;
+    --bg2: #191310;
+    --ink: #F6EDE3;
+    --muted: #B5A799;
+    --line: rgba(255, 236, 220, 0.1);
+    --glass: rgba(36, 27, 22, 0.55);
+    --glass-b: rgba(255, 226, 200, 0.12);
+    --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+    --accent-strong: #4ADE80;
+    --grad: linear-gradient(100deg, #3DDC6E 0%, #86EFAC 30%, #F5C04A 60%, #3DDC6E 100%);
+    --dot: rgba(255, 236, 220, 0.06);
+    --term: #0A0706;
+    --orb-opacity: 0.38;
+  }
+
+  html {
+    /* Preflight sets 1.5; the design leaves line-height at the browser default unless it says otherwise */
+    line-height: normal;
+    -webkit-tap-highlight-color: transparent;
+    /* Anchor jumps and keyboard focus land clear of the sticky header */
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    @apply bg-page text-ink;
+    transition: background-color 0.6s ease, color 0.6s ease;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 }
-html {
-  scroll-behavior: smooth;
+
+/* Patterns shared across sections */
+@layer components {
+  .skip-link {
+    @apply fixed left-4 top-4 z-[60] -translate-y-[200%] rounded-full bg-ink px-4.5 py-3 font-semibold text-page focus:translate-y-0;
+  }
+
+  .glass {
+    @apply border border-glass-edge bg-glass shadow-card backdrop-blur-[18px] backdrop-saturate-150;
+  }
+
+  /* Cards rise and tilt on hover */
+  .lift {
+    transition:
+      transform 0.45s theme("transitionTimingFunction.smooth"),
+      box-shadow 0.45s ease,
+      border-color 0.45s ease;
+  }
+
+  .lift:hover {
+    @apply -translate-y-1.5 -rotate-[0.4deg] border-accent/40 shadow-lift;
+  }
+
+  .btn {
+    @apply hover:-translate-y-0.5;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .btn-primary {
+    @apply bg-ink text-page shadow-cta hover:shadow-cta-hover;
+  }
+
+  .btn-ghost {
+    @apply text-ink;
+  }
+
+  /* The hero and contact buttons. Content-box like the design, so bordered ones are 54px tall. */
+  .btn-lg {
+    @apply box-content flex h-13 items-center gap-2.5 rounded-[14px] px-5.5 text-16 font-semibold;
+  }
+
+  .btn-ink {
+    @apply px-6;
+  }
+
+  .btn-accent {
+    @apply bg-brand-green px-6.5 text-brand-ink;
+  }
+
+  .btn-on-dark {
+    @apply border border-white/[.18] bg-white/[.06] px-6 text-term-ink;
+  }
+
+  .icon-btn {
+    @apply grid h-11 w-11 place-items-center rounded-full border border-line bg-transparent text-ink;
+  }
+
+  .grad-text {
+    @apply animate-shimmer bg-grad bg-[length:300%_100%] bg-clip-text text-transparent;
+  }
+
+  .orb {
+    @apply pointer-events-none absolute rounded-full opacity-[var(--orb-opacity)] blur-[70px];
+  }
+
+  .eyebrow {
+    @apply font-mono text-13 uppercase tracking-[0.08em] text-accent-strong;
+  }
+
+  /* Scroll-linked rise, as in the design (see Reveal.jsx) */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
+
+  /* Without scroll-driven animations, Reveal plays the same rise once on entering the viewport */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports not (animation-timeline: view()) {
+      .reveal {
+        opacity: 0;
+      }
+
+      .reveal.is-visible {
+        animation: rise 0.9s theme("transitionTimingFunction.smooth") both;
+      }
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.97);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .reveal,
+  .animate-intro {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
 }
