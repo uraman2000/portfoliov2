@@ -1,16 +1,21 @@
 import PropTypes from "prop-types"
+import Reveal from "./Reveal"
 
-// The Swiss split used across sections: a narrow label column beside a wide content column.
-export default function Row({ aside, children, className = "" }) {
+// A timeline row: a 200px label column beside the content, stacked below 860px.
+export default function Row({ as = "div", aside, children, className = "" }) {
   return (
-    <div className={`grid gap-y-4 lg:grid-cols-12 lg:gap-x-8 ${className}`}>
-      <div className="lg:col-span-3">{aside}</div>
-      <div className="lg:col-span-9">{children}</div>
-    </div>
+    <Reveal
+      as={as}
+      className={`grid grid-cols-[200px_minmax(0,1fr)] gap-10 compact:grid-cols-[minmax(0,1fr)] compact:gap-3 ${className}`}
+    >
+      {aside}
+      {children}
+    </Reveal>
   )
 }
 
 Row.propTypes = {
+  as: PropTypes.elementType,
   aside: PropTypes.node,
   children: PropTypes.node,
   className: PropTypes.string,

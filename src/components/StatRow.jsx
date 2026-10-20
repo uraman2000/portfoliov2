@@ -1,27 +1,24 @@
 import PropTypes from "prop-types"
+import Reveal from "./Reveal"
 
-// A KPI row of stat tiles: value in primary ink, sentence-case label beneath.
-// The DOM keeps label-then-value for screen readers; flex-col-reverse shows the value first.
-export default function StatRow({ items, className = "", style }) {
+// Glass stat cards. The DOM keeps label-then-value for screen readers; flex-col-reverse shows the value first.
+export default function StatRow({ items, className = "" }) {
   return (
-    <dl className={`grid grid-cols-2 border-t border-line lg:grid-cols-4 ${className}`} style={style}>
-      {items.map((item, index) => (
-        <div
-          key={item.label}
-          className={`flex flex-col-reverse justify-end gap-2 py-8 pr-4 lg:border-l lg:border-line lg:pl-6 lg:first:border-l-0 lg:first:pl-0 ${
-            index % 2 ? "border-l border-line pl-5" : ""
-          } ${index > 1 ? "border-t border-line lg:border-t-0" : ""}`}
-        >
-          <dt className="text-sm leading-snug text-muted">{item.label}</dt>
-          <dd className="text-4xl font-semibold tracking-tight sm:text-5xl">{item.value}</dd>
+    <Reveal
+      as="dl"
+      className={`mx-auto grid max-w-page grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-4 ${className}`}
+    >
+      {items.map(item => (
+        <div key={item.label} className="glass lift flex flex-col-reverse justify-end gap-2 rounded-[20px] p-6">
+          <dt className="text-15 leading-[1.45] text-muted">{item.label}</dt>
+          <dd className="grad-text font-display text-48 font-extrabold leading-none">{item.value}</dd>
         </div>
       ))}
-    </dl>
+    </Reveal>
   )
 }
 
 StatRow.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, label: PropTypes.string })).isRequired,
   className: PropTypes.string,
-  style: PropTypes.object,
 }

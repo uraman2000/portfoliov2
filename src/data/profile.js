@@ -1,32 +1,35 @@
-// Source of truth: public/pol-imbing-v4.pdf
+import { yearsOfExperience } from "./career"
+
+// Copy follows the "Home — Green Glass" design. Facts trace to public/pol-imbing-v4.pdf, except the
+// town in `location`, which only the design has.
+
+// Years counted from the first job to today (see career.js)
+const years = `${yearsOfExperience()}+`
+
 export const profile = {
-  name: "Pol Imbing",
   fullName: "Pol Maynard O. Imbing",
-  title: "Senior Full Stack Engineer",
-  role: "AI Team Lead & Solutions Architect",
-  headline: ["AI platforms,", "from first commit to production."],
-  lead: "I'm the primary engineer on an AI analysis platform in financial services, built in TypeScript with NestJS, Anthropic Claude, React and Terraform on Azure, and I lead its engineering team as Scrum Master.",
-  availability: "Open to remote roles & freelance projects",
-  facts: [
-    { label: "Currently", value: "AI Team Lead & Solutions Architect at YML Group" },
-    { label: "Based in", value: "Philippines" },
-    { label: "Core stack", value: "NestJS · React · Claude · Terraform" },
-  ],
+  tagline: "AI Team Lead · Solutions Architect · PH",
+  // The middle part renders in the gradient
+  headline: ["I build ", "AI systems", " that make it to production."],
+  lead: `Senior Full Stack Engineer with ${years} years across healthcare, finance, e-commerce and travel. Lately: taking a Claude-powered analysis platform from first commit to production — backend, frontend and every line of Terraform.`,
   email: "uraman2000@gmail.com",
+  location: "Santa Rosa, Laguna, Philippines",
   resume: { href: "/pol-imbing-v4.pdf", fileName: "Pol-Imbing-Resume.pdf" },
   socials: [
-    { id: "github", label: "GitHub", href: "https://github.com/uraman2000" },
+    { id: "github", label: "GitHub", handle: "uraman2000", href: "https://github.com/uraman2000" },
     {
       id: "linkedin",
       label: "LinkedIn",
+      handle: "pol-maynard-imbing-122a6315a",
       href: "https://www.linkedin.com/in/pol-maynard-imbing-122a6315a/",
     },
   ],
 }
 
 export const impact = [
-  { value: "8+", label: "Years in software development" },
-  { value: "26%", label: "Cut in a client's assessed valuation, from the platform's output" },
-  { value: "69×", label: "Faster candidate search after one query rewrite" },
-  { value: "700+", label: "Unit tests written for the AI platform" },
+  { value: "−26%", label: "client valuation cut, AUD 20.8M → 15.4M" },
+  { value: "69×", label: "faster candidate search, 29s → 0.4s" },
+  { value: "2.3M+", label: "public sales records in the matching engine" },
+  { value: "700+", label: "unit tests, plus a 56-scenario AI accuracy suite" },
+  { value: `${years} yrs`, label: "shipping React and Node.js in production" },
 ]

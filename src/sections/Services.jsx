@@ -1,48 +1,30 @@
 import Reveal from "../components/Reveal"
 import Section from "../components/Section"
-import { ArrowRight, Brain, CloudArrowUp, StackSimple, UsersThree } from "../components/icons"
 import { services } from "../data/services"
-
-const ICONS = { ai: Brain, fullstack: StackSimple, cloud: CloudArrowUp, lead: UsersThree }
 
 export default function Services() {
   return (
     <Section
       id="services"
-      index="02"
+      index="03"
       label="Services"
-      title="How I can help"
-      intro="Hire me full-time as a senior or lead engineer, or bring me in for a defined freelance project."
+      title={
+        <>
+          Hire me full-time, or <span className="grad-text">bring me in</span> for a build.
+        </>
+      }
     >
-      <ul className="grid border-l border-t border-line sm:grid-cols-2">
-        {services.map((service, index) => {
-          const Icon = ICONS[service.id]
-          return (
-            <Reveal
-              as="li"
-              key={service.id}
-              delay={(index % 2) * 60}
-              className="flex flex-col border-b border-r border-line p-6 sm:p-8 lg:p-10"
-            >
-              <Icon size={28} className="text-accent" aria-hidden="true" />
-              <h3 className="heading-3 mt-8">{service.title}</h3>
-              <p className="mt-3 leading-relaxed text-muted">{service.description}</p>
-              <ul className="square-list mt-6 space-y-2 text-[0.9375rem]">
-                {service.points.map(point => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </Reveal>
-          )
-        })}
-      </ul>
-
-      <Reveal className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-lg text-muted">Have a project or a role in mind?</p>
-        <a href="#contact" className="btn btn-primary">
-          Start a conversation
-          <ArrowRight size={18} className="nudge-x" aria-hidden="true" />
-        </a>
+      <Reveal as="ul" className="grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-4">
+        {services.map((service, index) => (
+          // Content-box like the design: 240px of content plus padding
+          <li key={service.id} className="glass lift box-content flex min-h-[240px] flex-col gap-3.5 rounded-3xl p-7">
+            <span aria-hidden="true" className="font-display text-40 font-extrabold text-accent-strong">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="font-display text-22 font-semibold">{service.title}</h3>
+            <p className="text-16 leading-[1.6] text-muted">{service.description}</p>
+          </li>
+        ))}
       </Reveal>
     </Section>
   )

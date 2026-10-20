@@ -1,5 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0F766E" />
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#006B00" />
+      <stop offset="0.55" stop-color="#008000" />
+      <stop offset="1" stop-color="#A16207" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#brand)" />
   <path d="M9.5 24V8h6.25a4.75 4.75 0 0 1 0 9.5H9.5" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" />
   <path d="M23 8v16" stroke="#fff" stroke-width="3" />
 </svg>

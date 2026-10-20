@@ -1,28 +1,39 @@
 import Reveal from "../components/Reveal"
 import Section from "../components/Section"
-import { skillGroups } from "../data/skills"
+import { stackGroups } from "../data/skills"
 
 export default function Stack() {
   return (
     <Section
       id="stack"
-      index="04"
+      index="02"
       label="Stack"
-      title="Tools I ship with"
-      intro="The stack behind the work above, from LLM APIs to infrastructure as code."
+      title={
+        <>
+          From prompt to <span className="grad-text">pipeline</span> to prod.
+        </>
+      }
     >
-      <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {skillGroups.map((group, index) => (
-          <Reveal key={group.label} delay={(index % 3) * 60} className="border-t border-line pt-5">
-            <h3 className="eyebrow text-fg">{group.label}</h3>
-            <ul className="mt-5 space-y-2 text-[0.9375rem] text-muted">
-              {group.items.map(item => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </Reveal>
+      <Reveal as="ul" className="grid grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))] gap-4">
+        {stackGroups.map(group => (
+          <li
+            key={group.label}
+            className={`glass lift flex flex-col rounded-3xl ${group.headline ? "gap-4 bg-tint p-8" : "gap-3 p-7"} ${
+              group.wide ? "col-span-2 compact:col-auto" : ""
+            }`}
+          >
+            <h3 className="font-mono text-13 font-normal text-accent-strong">{group.label}</h3>
+            {group.headline ? (
+              <>
+                <p className="font-display text-28 font-semibold leading-[1.2] tracking-[-0.01em]">{group.headline}</p>
+                <p className="text-16 leading-[1.6] text-muted">{group.text}</p>
+              </>
+            ) : (
+              <p className="text-17 leading-[1.6]">{group.text}</p>
+            )}
+          </li>
         ))}
-      </div>
+      </Reveal>
     </Section>
   )
 }

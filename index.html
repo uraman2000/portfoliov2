@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pol Imbing — Senior Full Stack Engineer & AI Team Lead</title>
+    <title>Pol Imbing — AI Team Lead and Full Stack Engineer</title>
     <meta
       name="description"
-      content="Pol Imbing is a Senior Full Stack Engineer and AI Team Lead with 8+ years in software development, and the primary engineer on an AI analysis platform in financial services built with NestJS, Anthropic Claude, React and Terraform on Azure."
+      content="Pol Imbing is a Senior Full Stack Engineer and AI Team Lead with __YEARS_OF_EXPERIENCE__+ years in software development, and the primary engineer on an AI analysis platform in financial services built with NestJS, Anthropic Claude, React and Terraform on Azure."
     />
-    <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FBF7F2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0F0B09" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href="https://www.polimbing.dev/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.polimbing.dev/" />
-    <meta property="og:title" content="Pol Imbing — Senior Full Stack Engineer & AI Team Lead" />
+    <meta property="og:title" content="Pol Imbing — AI Team Lead and Full Stack Engineer" />
     <meta
       property="og:description"
       content="AI platforms, from first commit to production. Open to remote roles and freelance projects."
@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -39,7 +39,7 @@
         try {
           var saved = localStorage.getItem("theme")
           var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches
-          document.documentElement.classList.toggle("dark", dark)
+          document.documentElement.dataset.theme = dark ? "dark" : "light"
         } catch (e) {}
       })()
     </script>

@@ -10,15 +10,13 @@ function readSavedTheme() {
   }
 }
 
-// The initial class is set by the inline script in index.html before first paint;
+// The inline script in index.html sets data-theme on <html> before first paint;
 // this hook keeps it in sync and follows the OS setting until the visitor picks a theme.
 export default function useTheme() {
-  const [theme, setTheme] = useState(() =>
-    document.documentElement.classList.contains("dark") ? "dark" : "light"
-  )
+  const [theme, setTheme] = useState(() => (document.documentElement.dataset.theme === "dark" ? "dark" : "light"))
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark")
+    document.documentElement.dataset.theme = theme
   }, [theme])
 
   useEffect(() => {

@@ -2,301 +2,193 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens as RGB channels so Tailwind can apply opacity (e.g. bg-accent/20).
-   Every text pair below is >= 4.5:1 and every form-field border >= 3:1 in both themes. */
+/* Green Glass design tokens. tailwind.config.js maps them to class names (bg-page, text-ink,
+   border-line, ...), so light and dark themes share one set of classes. */
 @layer base {
   :root {
     color-scheme: light;
-    --canvas: 250 250 250; /* #FAFAFA */
-    --surface: 255 255 255; /* #FFFFFF */
-    --fg: 9 9 11; /* #09090B */
-    --muted: 82 82 91; /* #52525B */
-    --subtle: 113 113 122; /* #71717A */
-    --line: 228 228 231; /* #E4E4E7 decorative dividers */
-    --field: 138 138 147; /* #8A8A93 form-field borders */
-    --accent: 15 118 110; /* #0F766E teal-700 */
-    --accent-hover: 17 94 89; /* #115E59 */
-    --accent-fg: 255 255 255;
-    --accent-soft: 240 253 250; /* #F0FDFA */
-    --success: 4 120 87; /* #047857 */
-    --danger: 185 28 28; /* #B91C1C */
-    --live: 5 150 105; /* #059669 */
+    --bg: #FBF7F2;
+    --bg2: #F3EADF;
+    --ink: #1C1713;
+    --muted: #5A5047;
+    --line: rgba(28, 23, 19, 0.1);
+    --glass: rgba(255, 255, 255, 0.58);
+    --glass-b: rgba(255, 255, 255, 0.9);
+    --shadow: 0 24px 60px -24px rgba(0, 90, 30, 0.24);
+    --accent: #008000;
+    --accent-strong: #006400;
+    --grad: linear-gradient(100deg, #006B00 0%, #008000 35%, #A16207 65%, #006B00 100%);
+    --dot: rgba(28, 23, 19, 0.07);
+    --term: #16110D;
+    --term-ink: #F3E8DC;
+    --term-mute: #A8998A;
+    --orb-opacity: 0.55;
   }
 
-  .dark {
+  :root[data-theme="dark"] {
     color-scheme: dark;
-    --canvas: 9 9 11; /* #09090B */
-    --surface: 19 19 22; /* #131316 */
-    --fg: 250 250 250; /* #FAFAFA */
-    --muted: 161 161 170; /* #A1A1AA */
-    --subtle: 139 139 148; /* #8B8B94 */
-    --line: 39 39 42; /* #27272A */
-    --field: 104 104 114; /* #686872 */
-    --accent: 45 212 191; /* #2DD4BF teal-400 */
-    --accent-hover: 94 234 212; /* #5EEAD4 */
-    --accent-fg: 4 47 46; /* #042F2E */
-    --accent-soft: 12 31 29; /* #0C1F1D */
-    --success: 52 211 153; /* #34D399 */
-    --danger: 248 113 113; /* #F87171 */
-    --live: 52 211 153; /* #34D399 */
+    --bg: #0F0B09;
+    --bg2: #191310;
+    --ink: #F6EDE3;
+    --muted: #B5A799;
+    --line: rgba(255, 236, 220, 0.1);
+    --glass: rgba(36, 27, 22, 0.55);
+    --glass-b: rgba(255, 226, 200, 0.12);
+    --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+    --accent-strong: #4ADE80;
+    --grad: linear-gradient(100deg, #3DDC6E 0%, #86EFAC 30%, #F5C04A 60%, #3DDC6E 100%);
+    --dot: rgba(255, 236, 220, 0.06);
+    --term: #0A0706;
+    --orb-opacity: 0.38;
   }
 
   html {
+    /* Preflight sets 1.5; the design leaves line-height at the browser default unless it says otherwise */
+    line-height: normal;
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    /* Keeps anchor targets and keyboard-focused elements clear of the sticky header */
-    scroll-padding-top: 5rem;
+    /* Anchor jumps and keyboard focus land clear of the sticky header */
+    scroll-padding-top: 88px;
   }
 
   body {
-    @apply bg-canvas font-sans text-fg antialiased;
-    text-rendering: optimizeLegibility;
+    @apply bg-page text-ink;
+    transition: background-color 0.6s ease, color 0.6s ease;
   }
 
-  ::selection {
-    background-color: rgb(var(--accent) / 0.22);
-  }
-
-  :focus-visible {
-    outline: 2px solid rgb(var(--accent));
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
 }
 
+/* Patterns shared across sections */
 @layer components {
-  /* Type scale */
-  .display {
-    font-size: clamp(2.75rem, 1.15rem + 5.6vw, 5.25rem);
-    line-height: 0.98;
-    letter-spacing: -0.045em;
-    font-weight: 600;
+  .skip-link {
+    @apply fixed left-4 top-4 z-[60] -translate-y-[200%] rounded-full bg-ink px-4.5 py-3 font-semibold text-page focus:translate-y-0;
   }
 
-  .heading-2 {
-    font-size: clamp(2rem, 1.3rem + 2.6vw, 3.5rem);
-    line-height: 1.04;
-    letter-spacing: -0.035em;
-    font-weight: 600;
+  .glass {
+    @apply border border-glass-edge bg-glass shadow-card backdrop-blur-[18px] backdrop-saturate-150;
   }
 
-  .heading-3 {
-    font-size: 1.375rem;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
-    font-weight: 600;
+  /* Cards rise and tilt on hover */
+  .lift {
+    transition:
+      transform 0.45s theme("transitionTimingFunction.smooth"),
+      box-shadow 0.45s ease,
+      border-color 0.45s ease;
   }
 
-  @media (min-width: 640px) {
-    .heading-3 {
-      font-size: 1.5rem;
-    }
+  .lift:hover {
+    @apply -translate-y-1.5 -rotate-[0.4deg] border-accent/40 shadow-lift;
   }
 
-  .eyebrow {
-    @apply font-mono text-[0.8125rem] uppercase tracking-[0.08em] text-subtle;
-  }
-
-  /* Buttons and links */
   .btn {
-    @apply inline-flex h-12 select-none items-center justify-center gap-2 rounded-sm px-5 text-[0.9375rem] font-medium transition-colors duration-150 ease-out;
+    @apply hover:-translate-y-0.5;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
   }
 
   .btn-primary {
-    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+    @apply bg-ink text-page shadow-cta hover:shadow-cta-hover;
   }
 
-  .btn-secondary {
-    @apply border border-line bg-surface text-fg hover:border-fg/40;
+  .btn-ghost {
+    @apply text-ink;
+  }
+
+  /* The hero and contact buttons. Content-box like the design, so bordered ones are 54px tall. */
+  .btn-lg {
+    @apply box-content flex h-13 items-center gap-2.5 rounded-[14px] px-5.5 text-16 font-semibold;
+  }
+
+  .btn-ink {
+    @apply px-6;
+  }
+
+  .btn-accent {
+    @apply bg-brand-green px-6.5 text-brand-ink;
+  }
+
+  .btn-on-dark {
+    @apply border border-white/[.18] bg-white/[.06] px-6 text-term-ink;
   }
 
   .icon-btn {
-    @apply inline-flex h-11 w-11 items-center justify-center rounded-sm text-muted transition-colors duration-150 hover:bg-fg/5 hover:text-fg;
+    @apply grid h-11 w-11 place-items-center rounded-full border border-line bg-transparent text-ink;
   }
 
-  .link {
-    @apply inline-flex items-center gap-1.5 font-medium text-fg underline decoration-line decoration-1 underline-offset-[6px] transition-colors duration-150 hover:decoration-accent;
+  .grad-text {
+    @apply animate-shimmer bg-grad bg-[length:300%_100%] bg-clip-text text-transparent;
   }
 
-  .nav-link {
-    @apply relative inline-flex h-10 items-center px-3 text-sm text-muted transition-colors duration-150 hover:text-fg;
+  .orb {
+    @apply pointer-events-none absolute rounded-full opacity-[var(--orb-opacity)] blur-[70px];
   }
 
-  .nav-link::after {
-    content: "";
-    @apply absolute inset-x-3 bottom-1.5 h-px origin-left scale-x-0 bg-accent transition-transform duration-200 ease-out;
+  .eyebrow {
+    @apply font-mono text-13 uppercase tracking-[0.08em] text-accent-strong;
   }
 
-  .nav-link[aria-current="true"] {
-    @apply text-fg;
-  }
-
-  .nav-link[aria-current="true"]::after {
-    @apply scale-x-100;
-  }
-
-  /* Forms */
-  .field {
-    @apply block w-full rounded-sm border border-field bg-surface px-3.5 py-3 text-base text-fg transition-colors duration-150 placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
-  }
-
-  .field[aria-invalid="true"] {
-    @apply border-danger focus:ring-danger/20;
-  }
-
-  /* Lists with small square markers, a Swiss detail */
-  .square-list > li {
-    position: relative;
-    padding-left: 1.25rem;
-  }
-
-  .square-list > li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.62em;
-    width: 6px;
-    height: 6px;
-    background: rgb(var(--accent));
-  }
-
-  .skip-link {
-    @apply fixed left-4 top-4 z-[60] -translate-y-24 rounded-sm bg-accent px-4 py-3 text-sm font-medium text-accent-fg focus:translate-y-0;
-  }
-
-  .status-dot {
-    position: relative;
-    display: inline-flex;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 9999px;
-    background: rgb(var(--live));
-  }
-
-  /* Faint column guides behind the hero; they line up with the impact-strip dividers */
-  .hero-guides {
-    background-image: linear-gradient(to right, rgb(var(--line)) 1px, transparent 1px);
-    background-size: 50% 100%;
-    border-right: 1px solid rgb(var(--line));
-    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
-    mask-image: linear-gradient(to bottom, #000, transparent 92%);
-  }
-
-  @media (min-width: 1024px) {
-    .hero-guides {
-      background-size: 25% 100%;
+  /* Scroll-linked rise, as in the design (see Reveal.jsx) */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
     }
   }
 
-  /* Case-study layout: text beside media on desktop, media after the title on mobile */
-  .project-row {
-    display: grid;
-    gap: 1.75rem;
-    grid-template-areas: "head" "media" "body";
-  }
+  /* Without scroll-driven animations, Reveal plays the same rise once on entering the viewport */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports not (animation-timeline: view()) {
+      .reveal {
+        opacity: 0;
+      }
 
-  .project-head {
-    grid-area: head;
-  }
-
-  .project-media {
-    grid-area: media;
-  }
-
-  .project-body {
-    grid-area: body;
-  }
-
-  @media (min-width: 1024px) {
-    .project-row {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      grid-template-rows: auto 1fr;
-      grid-template-areas: "head media" "body media";
-      column-gap: 3.5rem;
+      .reveal.is-visible {
+        animation: rise 0.9s theme("transitionTimingFunction.smooth") both;
+      }
     }
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .text-pretty {
-    text-wrap: pretty;
-  }
-}
-
-/* Motion: short and subtle. With reduced motion everything renders in its final state. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(12px);
-    transition:
-      opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-
-  .reveal.is-visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .rise {
-    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--rise-delay, 0ms);
-  }
-
-  .status-dot::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: inherit;
-    animation: ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
-  }
-
-  .btn svg {
-    transition: transform 150ms ease-out;
-  }
-
-  .btn:hover .nudge-x {
-    transform: translateX(2px);
-  }
-
-  .btn:hover .nudge-y {
-    transform: translateY(2px);
   }
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(60px) scale(0.97);
+    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 }
 
-@keyframes ping {
-  75%,
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
   }
 }
 
 @media print {
   .reveal,
-  .rise {
+  .animate-intro {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
     animation: none !important;
   }
 }
