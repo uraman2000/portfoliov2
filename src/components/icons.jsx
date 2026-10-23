@@ -49,6 +49,9 @@ export const Briefcase = createIcon(
 // Not in the design: the resume download button, drawn to match Mail / Code / Briefcase.
 export const Download = createIcon("Download", <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />)
 
+// Not in the design: marks the project links, which open the client sites in a new tab.
+export const ArrowUpRight = createIcon("ArrowUpRight", <path d="M7 17 17 7M8 7h9v9" />)
+
 export const Sun = createIcon(
   "Sun",
   <>

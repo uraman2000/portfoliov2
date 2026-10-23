@@ -1,12 +1,13 @@
+import PropTypes from "prop-types"
 import Reveal from "../components/Reveal"
 import Section from "../components/Section"
 import { services } from "../data/services"
 
-export default function Services() {
+export default function Services({ index }) {
   return (
     <Section
       id="services"
-      index="03"
+      index={index}
       label="Services"
       title={
         <>
@@ -28,4 +29,8 @@ export default function Services() {
       </Reveal>
     </Section>
   )
+}
+
+Services.propTypes = {
+  index: PropTypes.string.isRequired,
 }

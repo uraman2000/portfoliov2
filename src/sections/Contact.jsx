@@ -1,10 +1,11 @@
+import PropTypes from "prop-types"
 import Reveal from "../components/Reveal"
 import ResumeButton from "../components/ResumeButton"
 import SocialLinks from "../components/SocialLinks"
 import { Mail } from "../components/icons"
 import { profile } from "../data/profile"
 
-export default function Contact() {
+export default function Contact({ index }) {
   const mailto = `mailto:${profile.email}`
 
   return (
@@ -14,7 +15,7 @@ export default function Contact() {
         <div aria-hidden="true" className="orb -left-[100px] -top-[180px] h-[420px] w-[420px] animate-drift1 bg-brand-green opacity-[.45]" />
         <div aria-hidden="true" className="orb -bottom-[200px] -right-[60px] h-[380px] w-[380px] animate-drift2 bg-brand-amber opacity-40" />
 
-        <p className="eyebrow relative text-term-prompt">05 — Contact</p>
+        <p className="eyebrow relative text-term-prompt">{index} — Contact</p>
         <h2
           id="contact-heading"
           className="relative max-w-[880px] font-display text-72 font-extrabold leading-none tracking-[-0.035em] [text-wrap:balance] compact:text-48"
@@ -40,4 +41,8 @@ export default function Contact() {
       </Reveal>
     </section>
   )
+}
+
+Contact.propTypes = {
+  index: PropTypes.string.isRequired,
 }

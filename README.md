@@ -23,6 +23,7 @@ All copy lives in `src/data/`, so most updates never touch a component:
 | `terminal.js` | The hero terminal: title, hint and each command's output |
 | `experience.js` | Work history; the entry with `current: true` gets the large card and pipeline |
 | `skills.js` | Stack cards (`headline` makes the large card, `wide` spans two columns) and the tech marquee |
+| `projects.js` | Client sites in the Work section (title, description, link, screenshot in `src/assets/work/`) |
 | `services.js` | The four numbered service cards |
 | `writing.js` | Writing cards. Still the design's placeholders; add real posts (with `href`) before deploying |
 | `navigation.js` | Nav items (each `id` must match a section `id`) |

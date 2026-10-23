@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import Reveal from "../components/Reveal"
 import Section from "../components/Section"
 import { writing } from "../data/writing"
@@ -5,11 +6,11 @@ import { writing } from "../data/writing"
 // Cover art cycles through the design's three gradients
 const ART = ["bg-post-1", "bg-post-2", "bg-post-3"]
 
-export default function Writing() {
+export default function Writing({ index }) {
   return (
     <Section
       id="writing"
-      index="04"
+      index={index}
       label="Writing"
       title="Notes from the build."
       action={
@@ -35,4 +36,8 @@ export default function Writing() {
       </Reveal>
     </Section>
   )
+}
+
+Writing.propTypes = {
+  index: PropTypes.string.isRequired,
 }
