@@ -1,8 +1,9 @@
+// Writing is left out while its section is hidden in App.jsx; add { id: "writing", label: "Writing" } back with it.
 export const NAV_ITEMS = [
   { id: "experience", label: "Experience" },
+  { id: "work", label: "Work" },
   { id: "stack", label: "Stack" },
   { id: "services", label: "Services" },
-  { id: "writing", label: "Writing" },
 ]
 
 // "top" and "contact" are observed too, so no nav item stays highlighted above or below the nav sections.

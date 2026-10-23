@@ -106,11 +106,11 @@ function PastRole({ role }) {
 
 PastRole.propTypes = { role: roleShape.isRequired }
 
-export default function Experience() {
+export default function Experience({ index }) {
   return (
     <Section
       id="experience"
-      index="01"
+      index={index}
       label="Experience"
       title={
         <>
@@ -128,4 +128,8 @@ export default function Experience() {
       </ol>
     </Section>
   )
+}
+
+Experience.propTypes = {
+  index: PropTypes.string.isRequired,
 }

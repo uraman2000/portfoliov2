@@ -1,12 +1,13 @@
+import PropTypes from "prop-types"
 import Reveal from "../components/Reveal"
 import Section from "../components/Section"
 import { stackGroups } from "../data/skills"
 
-export default function Stack() {
+export default function Stack({ index }) {
   return (
     <Section
       id="stack"
-      index="02"
+      index={index}
       label="Stack"
       title={
         <>
@@ -36,4 +37,8 @@ export default function Stack() {
       </Reveal>
     </Section>
   )
+}
+
+Stack.propTypes = {
+  index: PropTypes.string.isRequired,
 }
